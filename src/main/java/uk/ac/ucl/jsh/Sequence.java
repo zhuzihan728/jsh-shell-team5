@@ -4,7 +4,10 @@ import java.io.OutputStream;
 
 public class Sequence implements Command{
     @Override
-    public void eval(CommandCaller cmdline, OutputStream output) {
+    private void eval(CommandCaller cmdline, OutputStream output) {
+    }
+    @Override
+    public void accept(CommandCaller caller) {
 
     }
 }
