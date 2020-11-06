@@ -9,9 +9,10 @@ public class JshMain {
     private static void runJsh(String cmdLine, OutputStream output){
         CmdLineParser parser = new CmdLineParser(cmdLine);
         ParseTree tree = parser.getParseTree();
+        System.out.println(tree);
         //How are we going to turn the tree into a corresponding command type and accept the visitor afterwards?
-        Command command = new Command(tree);
-        command.accept(new JshCaller());
+//        Command command = new Command(tree);
+//        command.accept(new JshCaller());
     }
 
     public static void main(String[] args) {
