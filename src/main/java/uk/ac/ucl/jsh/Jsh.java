@@ -71,6 +71,11 @@ public class Jsh {
             }
             String appName = tokens.get(0);
             ArrayList<String> appArgs = new ArrayList<String>(tokens.subList(1, tokens.size()));
+            
+            AppFactory appFactory = new AppFactory();
+            Application application = appFactory.getApplication(appName);
+            application.exec(appArgs, output);
+
             switch (appName) {
             case "cd":
                 if (appArgs.isEmpty()) {
