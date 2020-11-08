@@ -12,7 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -45,6 +45,7 @@ public class Jsh {
             }
         }
         rawCommands.add(lastSubcommand);
+
         for (String rawCommand : rawCommands) {
             String spaceRegex = "[^\\s\"']+|\"([^\"]*)\"|'([^']*)'";
             ArrayList<String> tokens = new ArrayList<String>();
@@ -85,6 +86,47 @@ public class Jsh {
                 }
                 currentDirectory = dir.getCanonicalPath();
                 break;
+            case "find":
+                File path;
+                String pattern;
+                if (appArgs.isEmpty() || appArgs.size() == 1) {
+                    throw new RuntimeException("find: missing argument");}              
+                else if (appArgs.size() == 2){
+                    if(appArgs.get(0).equals("-name")){
+                        path = new File(currentDirectory);
+                        pattern = appArgs.get(1).replaceAll("\\*", ".*");
+                    }
+                    else{
+                        throw new RuntimeException("find: wrong arguments");}                
+                }
+                else if (appArgs.size() == 3 ){
+                    if(appArgs.get(1).equals("-name")){
+                        path = new File(appArgs.get(0));
+                        pattern = appArgs.get(2).replaceAll("\\*", ".*");
+                    }
+                    else{
+                        throw new RuntimeException("find: wrong arguments");} 
+                }
+                else {
+                    throw new RuntimeException("find: too many arguments");
+                }
+        /*                      ↑上面确定path和pattern                     */               
+                try {
+                    boolean atLeastOnePrinted = getFiles(path, pattern, path, writer);
+                                   
+                    if (atLeastOnePrinted) {
+                        writer.write(System.getProperty("line.separator"));
+                        writer.flush();
+                    }
+                    else{
+                        throw new RuntimeException("find: no such file or directory");
+                    }
+                } catch (NullPointerException e) {
+                    throw new RuntimeException("find: no such directory");
+                }
+                break;
+                
+
             case "pwd":
                 writer.write(currentDirectory);
                 writer.write(System.getProperty("line.separator"));
@@ -285,11 +327,390 @@ public class Jsh {
                     }
                 }
                 break;
+            
+            case "sort":
+                if (appArgs.isEmpty()) {
+                    writeToShell(read_stdin(), writer, false);
+                }
+                else if (appArgs.size() == 1) {
+                    String sortArg = appArgs.get(0);
+                    if(sortArg.equals("-r")){
+                        writeToShell(read_stdin(), writer, true);
+                    }
+                    else {
+                        Path curp = Paths.get(currentDirectory);
+                        Path p = curp.resolve(sortArg);
+                        if (Files.exists(p)){
+                            try{writeToShell(read_file(p), writer, false);}
+                            catch(IOException e){throw new RuntimeException("sort: cannot open " + sortArg);}
+                        }
+                        else{
+                            throw new RuntimeException("sort: " + sortArg + " does not exist");
+                        }
+                    }      
+                }
+                else if (appArgs.size() == 2){
+                    if(appArgs.get(0).equals("-r")){
+                        String sortArg = appArgs.get(1);
+                        Path curp = Paths.get(currentDirectory);
+                        Path p = curp.resolve(sortArg);
+                        if (Files.exists(p)){
+                            try{writeToShell(read_file(p), writer, true);}
+                            catch(IOException e){throw new RuntimeException("sort: cannot open " + sortArg);}
+                        }
+                        else{
+                            throw new RuntimeException("sort: " + sortArg + " does not exist");
+                        }
+                    }
+                    else{
+                        throw new RuntimeException("sort: wrong arguments");
+                    }
+
+                }
+                else {
+                    throw new RuntimeException("sort: too many arguments");
+                }                
+                break;
+
+            case "uniq":
+                if (appArgs.isEmpty()) {
+                    uniToShell(read_stdin(), writer, false);
+                }
+                else if (appArgs.size() == 1) {
+                    String sortArg = appArgs.get(0);
+                    if(sortArg.equals("-i")){
+                        uniToShell(read_stdin(), writer, true);
+                    }
+                    else {
+                        Path curp = Paths.get(currentDirectory);
+                        Path p = curp.resolve(sortArg);
+                        if (Files.exists(p)){
+                            try{uniToShell(read_file(p), writer, false);}
+                            catch(IOException e){throw new RuntimeException("uniq: cannot open " + sortArg);}
+                        }
+                        else{
+                            throw new RuntimeException("uniq: " + sortArg + " does not exist");
+                        }
+                    }      
+                }
+                else if (appArgs.size() == 2){
+                    if(appArgs.get(0).equals("-i")){
+                        String sortArg = appArgs.get(1);
+                        Path curp = Paths.get(currentDirectory);
+                        Path p = curp.resolve(sortArg);
+                        if (Files.exists(p)){
+                            try{uniToShell(read_file(p), writer, true);}
+                            catch(IOException e){throw new RuntimeException("uniq: cannot open " + sortArg);}
+                        }
+                        else{
+                            throw new RuntimeException("uniq: " + sortArg + " does not exist");
+                        }
+                    }
+                    else{
+                        throw new RuntimeException("uniq: wrong arguments");
+                    }
+
+                }
+                else {
+                    throw new RuntimeException("uniq: too many arguments");
+                }
+                break;
+
+            case "cut":
+                String cutpat = "((\\d*[1-9]+\\d*)|(-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-))(,((\\d*[1-9]+\\d*)|(-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-)))*";
+                if (appArgs.size() < 2) {
+                    throw new RuntimeException("cut: missing arguments");
+                }
+                else if (appArgs.size() == 2){
+                    if(appArgs.get(0).equals("-b")){
+                        String option = appArgs.get(1);
+                            if (matchPattern(option, cutpat)){
+                                stdinToShell(writer, option);
+                            }
+                            else{
+                                throw new RuntimeException("cut: wrong option argument");
+                            }
+                    
+                    }
+                    else{
+                        throw new RuntimeException("cut: wrong argument");
+                    }
+
+                }
+                else if (appArgs.size() == 3){
+                    if(appArgs.get(0).equals("-b")){
+                        String option = appArgs.get(1);
+                        if (matchPattern(option, cutpat)){
+                            String cutArg = appArgs.get(2);
+                            Path curp = Paths.get(currentDirectory);
+                            Path p = curp.resolve(cutArg);
+                            if (Files.exists(p)){
+                                try{cutfileToShell(read_file(p), writer, option);}
+                                catch(IOException e){throw new RuntimeException("uniq: cannot open " + cutArg);}
+                            }
+                            else{
+                                throw new RuntimeException("uniq: " + cutArg + " does not exist");
+                            }
+                        }
+                        else{
+                            throw new RuntimeException("cut: wrong option argument");
+                        }
+
+                    
+                    }
+                    else{
+                        throw new RuntimeException("cut: wrong arguments");
+                    }
+
+                }
+                else {
+                    throw new RuntimeException("uniq: too many arguments");
+                }
+                break;
+                
+            
+
             default:
                 throw new RuntimeException(appName + ": unknown application");
             }
         }
     }
+
+// the methods used in cut
+
+    static ArrayList<Integer> optionSplit(String option){
+        String[] optionls = option.split(",");
+        ArrayList<Integer> cutls = new ArrayList<Integer>();
+        Integer toinf = 0;
+        Integer from;
+        Integer to; 
+        ArrayList<Integer> out = new ArrayList<Integer>();
+        for (String a : optionls){
+            if(!a.contains("-")){
+                from = Integer.parseInt(a);
+                if(from>=toinf&&toinf!=0){
+                    continue;
+                }
+                cutls.add(from);              
+            }
+            else{
+                if(a.startsWith("-")){
+                    to = Integer.parseInt(a.split("-")[1]);
+                    if(to>=toinf&&toinf!=0){
+                        return out = null;
+                    }
+                    for (int i=1; i<=to;i++){
+                        cutls.add(i);
+
+                    }                    
+                }
+                else if(a.endsWith("-")){
+                    from = Integer.parseInt(a.split("-")[0]);
+                    if(from>=toinf&&toinf!=0){
+                        continue;
+                    }
+                    cutls.add(from);
+                    if(!cutls.remove(toinf)){
+                        cutls.add(Integer.MAX_VALUE);
+                    }
+                    toinf = from;                    
+                }
+                else{
+                    String[] range = a.split("-");
+                    from = Integer.parseInt(range[0]);
+                    to = Integer.parseInt(range[1]);
+                    for (int i=from; i<=to;i++){
+                        if(i>=toinf&&toinf!=0){
+                            break;
+                        }
+                        cutls.add(i);
+                    }                    
+
+                }
+
+
+            }
+        }
+        cutls.sort(Integer::compareTo);
+        for (Integer a : cutls){
+            if(out.contains(a)){
+                continue;
+            }
+            out.add(a);
+
+        }
+        return out;
+    }
+
+    static void stdinToShell(OutputStreamWriter writer, String option)  throws IOException{
+        Scanner in = new Scanner(System.in);
+        ArrayList<Integer> cutnum = optionSplit(option);
+        Integer toinf = 0;
+        if(cutnum.contains(Integer.MAX_VALUE)){
+            toinf = cutnum.get(cutnum.size()-2);
+        }
+        String input;
+        String output;
+        while(in.hasNext()) {
+            output = "";
+            input = in.nextLine();
+            for (Integer i:cutnum){
+                if(i > input.length()){
+                    break;
+                }
+                if(i!=toinf){
+                    output = output + String.valueOf(input.charAt(i-1));
+                }
+                else{
+                    output = output + input.substring(i);
+                    break;
+                }
+
+            }
+            writer.write(output);
+            writer.write(System.getProperty("line.separator"));
+            writer.flush();        
+        }
+
+    }
+
+    static void cutfileToShell(ArrayList<String> file, OutputStreamWriter writer, String option)  throws IOException{
+        ArrayList<Integer> cutnum = optionSplit(option);
+        Integer toinf = 0;
+        if(cutnum.contains(Integer.MAX_VALUE)){
+            toinf = cutnum.get(cutnum.size()-2);
+        }
+        String output;
+        for(String input : file) {
+            output = "";
+            for (Integer i:cutnum){
+                if(i > input.length()){
+                    break;
+                }
+                if(i!=toinf){
+                    output = output + String.valueOf(input.charAt(i-1));
+                }
+                else{
+                    output = output + input.substring(i);
+                    break;
+                }
+
+            }
+            writer.write(output);
+            writer.write(System.getProperty("line.separator"));
+            writer.flush();        
+        }
+
+    }
+
+
+
+//finish cut
+
+//the methods below used in sort
+    static ArrayList<String> read_file(Path file) throws IOException {
+        Charset encoding = StandardCharsets.UTF_8;
+        BufferedReader reader = Files.newBufferedReader(file,encoding);
+        ArrayList<String> listoflines = new ArrayList<>();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            listoflines.add(line);
+        }
+        reader.close();
+        return listoflines;
+    }
+
+    static void writeToShell(ArrayList<String> listoflines, OutputStreamWriter writer, boolean r) throws IOException {
+        listoflines.sort(String::compareTo);
+        if (r){
+            Collections.reverse(listoflines);
+        }
+        for(String a:listoflines){
+            writer.write(a);
+            writer.write(System.getProperty("line.separator"));
+            writer.flush();
+        }
+    }
+
+    static void uniToShell(ArrayList<String> listoflines, OutputStreamWriter writer, boolean i) throws IOException {
+        String last=null;
+        if (i){
+            for(String a:listoflines){
+                if (a.equalsIgnoreCase(last)){
+                    continue;
+                }
+                writer.write(a);
+                writer.write(System.getProperty("line.separator"));
+                writer.flush();
+                last = a;
+            }
+
+        }
+        else{
+            for(String a:listoflines){
+            if (a.equals(last)){
+                continue;
+            }
+            writer.write(a);
+            writer.write(System.getProperty("line.separator"));
+            writer.flush();
+            last = a;
+            }
+        }    
+    }
+   
+    static ArrayList<String> read_stdin() {
+        Scanner in = new Scanner(System.in);
+        ArrayList<String> listoflines = new ArrayList<>();
+        while(in.hasNext()) {
+            listoflines.add(in.nextLine());
+        }
+        return listoflines;
+    }
+//finish sort
+
+
+
+
+//the methods below used in find
+    static boolean getFiles(File file, String pattern, File path, OutputStreamWriter writer) throws IOException {
+        boolean printed1 = false;
+        boolean printed2 = false;
+        File[] files = file.listFiles();
+        for (File a : files) {
+            if(a.getName().startsWith(".")){continue;}
+            if (matchPattern(a.getName(), pattern)) {
+                writer.write(getRelative(path,a));
+                writer.write("\n");
+                writer.flush();
+                printed1 = true;            
+            }      
+            if(a.isDirectory()){
+                if(getFiles(a,pattern,path,writer)){printed2=true;}
+              
+            }  
+        }
+
+        return (printed1 || printed2);
+    }
+
+    static boolean matchPattern(String name, String pattern){
+        Pattern p = Pattern.compile(pattern);
+        Matcher m = p.matcher(name);
+        return m.matches();
+    }
+
+    static String getRelative(File mother, File child){//需要检验
+        String rp = Paths.get(mother.getAbsolutePath()).relativize(Paths.get(child.getAbsolutePath())).toString();
+        if(rp.startsWith(File.separator)){
+            return "."+ rp;
+        }
+        else{
+            return "."+ File.separator + rp;
+        }
+    }
+//finish find
+
 
     public static void main(String[] args) {
         if (args.length > 0) {
