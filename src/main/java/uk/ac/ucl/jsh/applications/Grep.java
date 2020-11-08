@@ -1,4 +1,6 @@
-package uk.ac.ucl.jsh;
+package uk.ac.ucl.jsh.applications;
+
+import uk.ac.ucl.jsh.applications.Application;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -12,7 +14,6 @@ import java.nio.file.Paths;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 
 public class Grep implements Application {
     public Grep() {

@@ -1,4 +1,6 @@
-package uk.ac.ucl.jsh;
+package uk.ac.ucl.jsh.applications;
+
+import uk.ac.ucl.jsh.applications.Application;
 
 import java.util.ArrayList;
 import java.lang.String;
@@ -13,7 +15,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 
-public class Tail implements Application{
+public class Tail implements Application {
     public Tail(){
 
     }

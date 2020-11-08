@@ -1,4 +1,4 @@
-package uk.ac.ucl.jsh;
+package uk.ac.ucl.jsh.applications;
 
 
 public class AppFactory {
@@ -43,5 +43,5 @@ public class AppFactory {
             return new Sort();
         }
         return null;
-    }     
+    }
 }

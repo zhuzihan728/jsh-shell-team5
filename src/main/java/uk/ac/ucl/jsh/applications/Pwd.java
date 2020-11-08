@@ -1,4 +1,6 @@
-package uk.ac.ucl.jsh;
+package uk.ac.ucl.jsh.applications;
+
+import uk.ac.ucl.jsh.applications.Application;
 
 import java.util.ArrayList;
 import java.lang.String;
@@ -6,7 +8,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
 
-public class Pwd implements Application{
+public class Pwd implements Application {
     public Pwd(){
         
     }

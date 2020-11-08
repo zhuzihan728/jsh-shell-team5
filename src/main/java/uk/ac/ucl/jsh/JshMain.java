@@ -1,6 +1,7 @@
 package uk.ac.ucl.jsh;
 
 import org.antlr.v4.runtime.tree.ParseTree;
+import uk.ac.ucl.jsh.parser.CmdLineParser;
 
 import java.io.OutputStream;
 import java.util.Scanner;
@@ -9,7 +10,6 @@ public class JshMain {
     private static void runJsh(String cmdLine, OutputStream output){
         CmdLineParser parser = new CmdLineParser(cmdLine);
         ParseTree tree = parser.getParseTree();
-        System.out.println(tree);
         //How are we going to turn the tree into a corresponding command type and accept the visitor afterwards?
 //        Command command = new Command(tree);
 //        command.accept(new JshCaller());

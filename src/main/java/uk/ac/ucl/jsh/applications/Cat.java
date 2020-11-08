@@ -1,4 +1,4 @@
-package uk.ac.ucl.jsh;
+package uk.ac.ucl.jsh.applications;
 
 import java.util.ArrayList;
 import java.lang.String;

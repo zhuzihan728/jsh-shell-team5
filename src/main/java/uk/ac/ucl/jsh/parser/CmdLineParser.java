@@ -1,9 +1,11 @@
-package uk.ac.ucl.jsh;
+package uk.ac.ucl.jsh.parser;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
+import uk.ac.ucl.jsh.JshGrammarLexer;
+import uk.ac.ucl.jsh.JshGrammarParser;
 
 public class CmdLineParser{
     private String cmdLine;
@@ -27,5 +29,6 @@ public class CmdLineParser{
         CommonTokenStream tokenStream = new CommonTokenStream(lexer);
         JshGrammarParser parser = new JshGrammarParser(tokenStream);
         parseTree = parser.command();
+        System.out.println(parseTree.toStringTree(parser));
     }
 }
