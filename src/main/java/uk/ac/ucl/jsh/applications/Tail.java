@@ -2,6 +2,7 @@ package uk.ac.ucl.jsh.applications;
 
 import uk.ac.ucl.jsh.applications.Application;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.lang.String;
 import java.nio.charset.Charset;
@@ -9,10 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 
 
 public class Tail implements Application {
@@ -20,6 +17,8 @@ public class Tail implements Application {
 
     }
     public void exec(ArrayList<String> args, OutputStream output){
+        String currentDirectory = getCurrentDirectory();
+        OutputStreamWriter writer = new OutputStreamWriter(output);
         if (args.isEmpty()) {
                     throw new RuntimeException("tail: missing arguments");
                 }
@@ -47,7 +46,7 @@ public class Tail implements Application {
                     Path filePath = Paths.get((String) currentDirectory + File.separator + tailArg);
                     ArrayList<String> storage = new ArrayList<>();
                     try (BufferedReader reader = Files.newBufferedReader(filePath, encoding)) {
-                        String line = null;
+                        String line;
                         while ((line = reader.readLine()) != null) {
                             storage.add(line);
                         }

@@ -2,6 +2,8 @@ package uk.ac.ucl.jsh.applications;
 
 import uk.ac.ucl.jsh.applications.Application;
 
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.lang.String;
 import java.io.File;
@@ -14,8 +16,9 @@ public class Ls implements Application {
     }
     public void exec(ArrayList<String> args, OutputStream output){
         File currDir;
+        OutputStreamWriter writer = new OutputStreamWriter(output);
         if (args.isEmpty()) {
-            currDir = new File(currentDirectory);
+            currDir = new File(getCurrentDirectory());
         } else if (args.size() == 1) {
             currDir = new File(args.get(0));
         } else {
@@ -36,7 +39,7 @@ public class Ls implements Application {
                 writer.write(System.getProperty("line.separator"));
                 writer.flush();
             }
-        } catch (NullPointerException e) {
+        } catch (NullPointerException | IOException e) {
             throw new RuntimeException("ls: no such directory");
         }   
     }

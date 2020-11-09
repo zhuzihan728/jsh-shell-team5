@@ -1,5 +1,6 @@
 package uk.ac.ucl.jsh.applications;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.lang.String;
 import java.io.File;
@@ -10,7 +11,8 @@ public class Cd implements Application{
     public Cd(){
 
     }
-    public void exec(ArrayList<String> args, OutputStream output){
+    public void exec(ArrayList<String> args, OutputStream output) throws IOException {
+        String currentDirectory = getCurrentDirectory();
         if (args.isEmpty()) {
             throw new RuntimeException("cd: missing argument");
         } else if (args.size() > 1) {
@@ -21,6 +23,7 @@ public class Cd implements Application{
         if (!dir.exists() || !dir.isDirectory()) {
             throw new RuntimeException("cd: " + dirString + " is not an existing directory");
         }
+//        use checker for this
         currentDirectory = dir.getCanonicalPath();
     }
 }

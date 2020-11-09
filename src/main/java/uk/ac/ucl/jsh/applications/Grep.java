@@ -2,6 +2,7 @@ package uk.ac.ucl.jsh.applications;
 
 import uk.ac.ucl.jsh.applications.Application;
 
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +22,7 @@ public class Grep implements Application {
     }
 
     public void exec(ArrayList<String> args, OutputStream output){
+        OutputStreamWriter writer = new OutputStreamWriter(output);
         if (args.size() < 2) {
             throw new RuntimeException("grep: wrong number of arguments");
         }
@@ -28,7 +30,7 @@ public class Grep implements Application {
         int numOfFiles = args.size() - 1;
         Path filePath;
         Path[] filePathArray = new Path[numOfFiles];
-        Path currentDir = Paths.get(currentDirectory);
+        Path currentDir = Paths.get(getCurrentDirectory());
         for (int i = 0; i < numOfFiles; i++) {
             filePath = currentDir.resolve(args.get(i + 1));
             if (Files.notExists(filePath) || Files.isDirectory(filePath) || 

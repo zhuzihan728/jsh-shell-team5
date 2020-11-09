@@ -20,8 +20,6 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
-import uk.ac.ucl.jsh.applications.AppFactory;
-import uk.ac.ucl.jsh.applications.Application;
 
 public class Jsh {
 
@@ -72,10 +70,6 @@ public class Jsh {
             }
             String appName = tokens.get(0);
             ArrayList<String> appArgs = new ArrayList<String>(tokens.subList(1, tokens.size()));
-            
-            AppFactory appFactory = new AppFactory();
-            Application application = appFactory.getApplication(appName);
-            application.exec(appArgs, output);
 
             switch (appName) {
             case "cd":

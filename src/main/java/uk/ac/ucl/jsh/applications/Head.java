@@ -2,6 +2,7 @@ package uk.ac.ucl.jsh.applications;
 
 import uk.ac.ucl.jsh.applications.Application;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.lang.String;
 import java.nio.charset.Charset;
@@ -9,10 +10,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 
 
 public class Head implements Application {
@@ -20,6 +17,7 @@ public class Head implements Application {
 
     }
     public void exec(ArrayList<String> args, OutputStream output){
+        OutputStreamWriter writer = new OutputStreamWriter(output);
         if (args.isEmpty()) {
             throw new RuntimeException("head: missing arguments");
         }
@@ -41,6 +39,7 @@ public class Head implements Application {
         } else {
             headArg = args.get(0);
         }
+        String currentDirectory = getCurrentDirectory();
         File headFile = new File(currentDirectory + File.separator + headArg);
         if (headFile.exists()) {
             Charset encoding = StandardCharsets.UTF_8;
