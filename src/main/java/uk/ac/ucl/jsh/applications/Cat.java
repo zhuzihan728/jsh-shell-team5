@@ -23,7 +23,7 @@ public class Cat implements Application{
         } else {
             for (String arg : args) {
                 Charset encoding = StandardCharsets.UTF_8;
-                String currentDirectory;
+                String currentDirectory ;
                 File currFile = new File(currentDirectory + File.separator + arg);
                 if (currFile.exists()) {
                     Path filePath = Paths.get(currentDirectory + File.separator + arg);
