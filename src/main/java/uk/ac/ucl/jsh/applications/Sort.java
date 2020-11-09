@@ -1,5 +1,6 @@
 package uk.ac.ucl.jsh.applications;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -95,5 +96,6 @@ public class Sort implements Application{
             listoflines.add(in.nextLine());
         }
         return listoflines;
+
     }
 }

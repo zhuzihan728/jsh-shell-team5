@@ -1,14 +1,17 @@
 package uk.ac.ucl.jsh.applications;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,9 +58,10 @@ public class Grep implements Application{
                     }
                 }
             } catch (IOException e) {
+
                 throw new RuntimeException("grep: cannot open " + appArgs.get(j + 1));
             }
         }
-    
+   
     }
 }

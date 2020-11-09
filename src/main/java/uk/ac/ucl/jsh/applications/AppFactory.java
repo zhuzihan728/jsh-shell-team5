@@ -3,6 +3,7 @@ package uk.ac.ucl.jsh.applications;
 
 public class AppFactory {
 
+
     public Application getApplication(String applicationType){
         if(applicationType.equalsIgnoreCase("cd")){
             return new Cd();
@@ -46,3 +47,4 @@ public class AppFactory {
         
     }
 }
+

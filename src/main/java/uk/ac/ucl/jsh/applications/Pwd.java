@@ -1,5 +1,4 @@
 package uk.ac.ucl.jsh.applications;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
@@ -20,3 +19,4 @@ public class Pwd implements Application{
         writer.flush();
     }
 }
+

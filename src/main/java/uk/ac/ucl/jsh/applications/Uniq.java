@@ -1,5 +1,6 @@
 package uk.ac.ucl.jsh.applications;
 
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -107,5 +108,6 @@ public class Uniq implements Application{
             last = a;
             }
         }    
+
     }
 }

@@ -1,6 +1,7 @@
 package uk.ac.ucl.jsh.applications;
 
 import java.io.IOException;
+
 import java.io.OutputStream;
 import java.util.ArrayList;
 
@@ -23,5 +24,6 @@ public class Cd implements Application{
             throw new RuntimeException("cd: " + dirString + " is not an existing directory");
         }
         WorkingDr.getInstance().setWD(dir.getCanonicalPath()); 
+
     }
 }
