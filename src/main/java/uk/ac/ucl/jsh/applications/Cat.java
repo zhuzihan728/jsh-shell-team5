@@ -1,30 +1,36 @@
 package uk.ac.ucl.jsh.applications;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.lang.String;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.Files;
+import java.util.ArrayList;
+
+import uk.ac.ucl.jsh.tools.WorkingDr;
+
 
 
 public class Cat implements Application{
-    public Cat(){
 
-    }
-    public void exec(ArrayList<String> args, OutputStream output){
+    
+	@Override
+    public void exec(ArrayList<String> appArgs, OutputStream output) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(output);
-        if (args.isEmpty()) {
+        if (appArgs.isEmpty()) {
             throw new RuntimeException("cat: missing arguments");
         } else {
-            for (String arg : args) {
+            for (String arg : appArgs) {
                 Charset encoding = StandardCharsets.UTF_8;
-                String currentDirectory = getCurrentDirectory();
-                File currFile = new File(currentDirectory + File.separator + arg);
+                File currFile = new File(WorkingDr.getInstance().getWD() + File.separator + arg);
                 if (currFile.exists()) {
-                    Path filePath = Paths.get(currentDirectory + File.separator + arg);
+                    Path filePath = Paths.get(WorkingDr.getInstance().getWD() + File.separator + arg);
                     try (BufferedReader reader = Files.newBufferedReader(filePath, encoding)) {
                         String line = null;
                         while ((line = reader.readLine()) != null) {

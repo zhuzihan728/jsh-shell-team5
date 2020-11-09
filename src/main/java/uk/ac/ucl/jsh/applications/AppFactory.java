@@ -2,10 +2,9 @@ package uk.ac.ucl.jsh.applications;
 
 
 public class AppFactory {
+
+
     public Application getApplication(String applicationType){
-        if(applicationType == null){
-            return null;
-        }
         if(applicationType.equalsIgnoreCase("cd")){
             return new Cd();
         }
@@ -42,6 +41,10 @@ public class AppFactory {
         else if(applicationType.equalsIgnoreCase("sort")){
             return new Sort();
         }
-        return null;
+        else{
+            throw new RuntimeException(applicationType+" is not an application");
+        }
+        
     }
 }
+

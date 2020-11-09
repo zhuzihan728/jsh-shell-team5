@@ -1,49 +1,51 @@
 package uk.ac.ucl.jsh.applications;
 
-import uk.ac.ucl.jsh.applications.Application;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.lang.String;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
+import uk.ac.ucl.jsh.tools.WorkingDr;
 
-public class Head implements Application {
-    public Head(){
+public class Head implements Application{
 
-    }
-    public void exec(ArrayList<String> args, OutputStream output){
+	@Override
+    public void exec(ArrayList<String> appArgs, OutputStream output) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(output);
-        if (args.isEmpty()) {
+        if (appArgs.isEmpty()) {
             throw new RuntimeException("head: missing arguments");
         }
-        if (args.size() != 1 && args.size() != 3) {
+        if (appArgs.size() != 1 && appArgs.size() != 3) {
             throw new RuntimeException("head: wrong arguments");
         }
-        if (args.size() == 3 && !args.get(0).equals("-n")) {
-            throw new RuntimeException("head: wrong argument " + args.get(0));
+        if (appArgs.size() == 3 && !appArgs.get(0).equals("-n")) {
+            throw new RuntimeException("head: wrong argument " + appArgs.get(0));
         }
         int headLines = 10;
         String headArg;
-        if (args.size() == 3) {
+        if (appArgs.size() == 3) {
             try {
-                headLines = Integer.parseInt(args.get(1));
+                headLines = Integer.parseInt(appArgs.get(1));
             } catch (Exception e) {
-                throw new RuntimeException("head: wrong argument " + args.get(1));
+                throw new RuntimeException("head: wrong argument " + appArgs.get(1));
             }
-            headArg = args.get(2);
+            headArg = appArgs.get(2);
         } else {
-            headArg = args.get(0);
+            headArg = appArgs.get(0);
         }
-        String currentDirectory = getCurrentDirectory();
-        File headFile = new File(currentDirectory + File.separator + headArg);
+        File headFile = new File(WorkingDr.getInstance().getWD() + File.separator + headArg);
         if (headFile.exists()) {
             Charset encoding = StandardCharsets.UTF_8;
-            Path filePath = Paths.get((String) currentDirectory + File.separator + headArg);
+            Path filePath = Paths.get((String) WorkingDr.getInstance().getWD() + File.separator + headArg);
             try (BufferedReader reader = Files.newBufferedReader(filePath, encoding)) {
                 for (int i = 0; i < headLines; i++) {
                     String line = null;

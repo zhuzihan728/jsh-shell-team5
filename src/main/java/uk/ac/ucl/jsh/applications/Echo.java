@@ -1,22 +1,19 @@
 package uk.ac.ucl.jsh.applications;
-
-import uk.ac.ucl.jsh.applications.Application;
-
-import java.util.ArrayList;
-import java.lang.String;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
-public class Echo implements Application {
-    public Echo() {
 
-    }
 
-    public void exec(ArrayList<String> args, OutputStream output) throws IOException {
+
+public class Echo implements Application{
+    
+	@Override
+    public void exec(ArrayList<String> appArgs, OutputStream output) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(output);
         boolean atLeastOnePrinted = false;
-                for (String arg : args) {
+                for (String arg : appArgs) {
                     writer.write(arg);
                     writer.write(" ");
                     writer.flush();

@@ -1,26 +1,24 @@
 package uk.ac.ucl.jsh.applications;
-
-import uk.ac.ucl.jsh.applications.Application;
-
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.lang.String;
+
+import uk.ac.ucl.jsh.tools.WorkingDr;
+
 import java.io.File;
-import java.io.OutputStream;
+
+public class Ls implements Application{
 
 
-public class Ls implements Application {
-    public Ls(){
-
-    }
-    public void exec(ArrayList<String> args, OutputStream output){
-        File currDir;
+	@Override
+    public void exec(ArrayList<String> appArgs, OutputStream output) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(output);
-        if (args.isEmpty()) {
-            currDir = new File(getCurrentDirectory());
-        } else if (args.size() == 1) {
-            currDir = new File(args.get(0));
+        File currDir;
+        if (appArgs.isEmpty()) {
+            currDir = new File(WorkingDr.getInstance().getWD());
+        } else if (appArgs.size() == 1) {
+            currDir = new File(appArgs.get(0));
         } else {
             throw new RuntimeException("ls: too many arguments");
         }
@@ -39,8 +37,9 @@ public class Ls implements Application {
                 writer.write(System.getProperty("line.separator"));
                 writer.flush();
             }
-        } catch (NullPointerException | IOException e) {
+        } catch (NullPointerException e) {
             throw new RuntimeException("ls: no such directory");
-        }   
+        }
+
     }
 }
