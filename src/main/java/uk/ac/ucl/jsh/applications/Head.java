@@ -1,20 +1,12 @@
 package uk.ac.ucl.jsh.applications;
 
-
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import uk.ac.ucl.jsh.toolkit.InputReader;
 
-import uk.ac.ucl.jsh.tools.WorkingDr;
 
 public class Head implements Application{
 
@@ -42,11 +34,7 @@ public class Head implements Application{
         } else {
             headArg = appArgs.get(0);
         }
-        File headFile = new File(WorkingDr.getInstance().getWD() + File.separator + headArg);
-        if (headFile.exists()) {
-            Charset encoding = StandardCharsets.UTF_8;
-            Path filePath = Paths.get((String) WorkingDr.getInstance().getWD() + File.separator + headArg);
-            try (BufferedReader reader = Files.newBufferedReader(filePath, encoding)) {
+        try (BufferedReader reader = InputReader.file_reader(headArg)) {
                 for (int i = 0; i < headLines; i++) {
                     String line = null;
                     if ((line = reader.readLine()) != null) {
@@ -55,11 +43,8 @@ public class Head implements Application{
                         writer.flush();
                     }
                 }
-            } catch (IOException e) {
-                throw new RuntimeException("head: cannot open " + headArg);
-            }
-        } else {
-            throw new RuntimeException("head: " + headArg + " does not exist");
-        }
+        } 
+        catch (IOException e) {throw new RuntimeException("head: cannot open " + headArg);}
+        catch(RuntimeException e){throw new RuntimeException("head: " + headArg + " does not exist");}
     }
 }

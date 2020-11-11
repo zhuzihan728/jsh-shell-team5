@@ -5,12 +5,12 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import uk.ac.ucl.jsh.tools.WorkingDr;
-
 import java.io.File;
+
+import uk.ac.ucl.jsh.toolkit.PatternMatcher;
+import uk.ac.ucl.jsh.toolkit.WorkingDr;
+
+
 
 public class Find implements Application{
 
@@ -42,8 +42,7 @@ public class Find implements Application{
         }
 /*                      ↑上面确定path和pattern                     */               
         try {
-            boolean atLeastOnePrinted = getFiles(path, pattern, path, writer);
-                            
+            boolean atLeastOnePrinted = getFiles(path, pattern, path, writer);                        
             if (atLeastOnePrinted) {
                 writer.write(System.getProperty("line.separator"));
                 writer.flush();
@@ -55,13 +54,14 @@ public class Find implements Application{
             throw new RuntimeException("find: no such directory");
         }
     }
-    static boolean getFiles(File file, String pattern, File path, OutputStreamWriter writer) throws IOException {
+    
+    private boolean getFiles(File file, String pattern, File path, OutputStreamWriter writer) throws IOException {
         boolean printed1 = false;
         boolean printed2 = false;
         File[] files = file.listFiles();
         for (File a : files) {
             if(a.getName().startsWith(".")){continue;}
-            if (matchPattern(a.getName(), pattern)) {
+            if (PatternMatcher.matchPattern(a.getName(), pattern)) {
                 writer.write(getRelative(path,a));
                 writer.write("\n");
                 writer.flush();
@@ -72,17 +72,10 @@ public class Find implements Application{
               
             }  
         }
-
         return (printed1 || printed2);
     }
 
-    static boolean matchPattern(String name, String pattern){
-        Pattern p = Pattern.compile(pattern);
-        Matcher m = p.matcher(name);
-        return m.matches();
-    }
-
-    static String getRelative(File mother, File child){//需要检验
+    private String getRelative(File mother, File child){
         String rp = Paths.get(mother.getAbsolutePath()).relativize(Paths.get(child.getAbsolutePath())).toString();
         if(rp.startsWith(File.separator)){
             return "."+ rp;

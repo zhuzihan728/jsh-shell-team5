@@ -1,21 +1,11 @@
 package uk.ac.ucl.jsh.applications;
 
-
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-
 import java.util.ArrayList;
+import uk.ac.ucl.jsh.toolkit.InputReader;
 
-import uk.ac.ucl.jsh.tools.WorkingDr;
 
 
 public class Tail implements Application{
@@ -44,32 +34,23 @@ public class Tail implements Application{
         } else {
             tailArg = appArgs.get(0);
         }
-        File tailFile = new File(WorkingDr.getInstance().getWD() + File.separator + tailArg);
-        if (tailFile.exists()) {
-            Charset encoding = StandardCharsets.UTF_8;
-            Path filePath = Paths.get((String) WorkingDr.getInstance().getWD() + File.separator + tailArg);
-            ArrayList<String> storage = new ArrayList<>();
-            try (BufferedReader reader = Files.newBufferedReader(filePath, encoding)) {
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    storage.add(line);
-                }
-                int index = 0;
-                if (tailLines > storage.size()) {
-                    index = 0;
-                } else {
-                    index = storage.size() - tailLines;
-                }
-                for (int i = index; i < storage.size(); i++) {
-                    writer.write(storage.get(i) + System.getProperty("line.separator"));
-                    writer.flush();
-                }            
-            } catch (IOException e) {
-                throw new RuntimeException("tail: cannot open " + tailArg);
+        try {
+            ArrayList<String> storage = InputReader.read_file(tailArg);
+            int index = 0;
+            if (tailLines > storage.size()) {
+                index = 0;
+            } else {
+                index = storage.size() - tailLines;
             }
-        } else {
+            for (int i = index; i < storage.size(); i++) {
+                writer.write(storage.get(i) + System.getProperty("line.separator"));
+                writer.flush();
+            }            
+        } 
+        catch (IOException e) {
+            throw new RuntimeException("tail: cannot open " + tailArg);}
+        catch (RuntimeException e){
             throw new RuntimeException("tail: " + tailArg + " does not exist");
         }
-
     }
 }

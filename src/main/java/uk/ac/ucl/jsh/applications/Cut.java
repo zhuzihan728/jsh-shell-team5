@@ -1,20 +1,13 @@
 package uk.ac.ucl.jsh.applications;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import uk.ac.ucl.jsh.tools.WorkingDr;
+import uk.ac.ucl.jsh.toolkit.InputReader;
+import uk.ac.ucl.jsh.toolkit.PatternMatcher;
 
 
 public class Cut implements Application{
@@ -29,13 +22,12 @@ public class Cut implements Application{
         else if (appArgs.size() == 2){
             if(appArgs.get(0).equals("-b")){
                 String option = appArgs.get(1);
-                    if (matchPattern(option, cutpat)){
+                    if (PatternMatcher.matchPattern(option, cutpat)){
                         stdinToShell(writer, option);
                     }
                     else{
                         throw new RuntimeException("cut: wrong option argument");
                     }
-            
             }
             else{
                 throw new RuntimeException("cut: wrong argument");
@@ -45,23 +37,15 @@ public class Cut implements Application{
         else if (appArgs.size() == 3){
             if(appArgs.get(0).equals("-b")){
                 String option = appArgs.get(1);
-                if (matchPattern(option, cutpat)){
+                if (PatternMatcher.matchPattern(option, cutpat)){
                     String cutArg = appArgs.get(2);
-                    Path curp = Paths.get(WorkingDr.getInstance().getWD());
-                    Path p = curp.resolve(cutArg);
-                    if (Files.exists(p)){
-                        try{cutfileToShell(read_file(p), writer, option);}
-                        catch(IOException e){throw new RuntimeException("uniq: cannot open " + cutArg);}
-                    }
-                    else{
-                        throw new RuntimeException("uniq: " + cutArg + " does not exist");
-                    }
+                    try{cutfileToShell(InputReader.read_file(cutArg), writer, option);}
+                    catch(IOException e){throw new RuntimeException("uniq: cannot open " + cutArg);}
+                    catch(RuntimeException e){throw new RuntimeException("uniq: " + cutArg + " does not exist");}
                 }
                 else{
                     throw new RuntimeException("cut: wrong option argument");
                 }
-
-            
             }
             else{
                 throw new RuntimeException("cut: wrong arguments");
@@ -197,24 +181,6 @@ public class Cut implements Application{
         }
 
     }
-    static ArrayList<String> read_file(Path file) throws IOException {
-        Charset encoding = StandardCharsets.UTF_8;
-        BufferedReader reader = Files.newBufferedReader(file,encoding);
-        ArrayList<String> listoflines = new ArrayList<>();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            listoflines.add(line);
-        }
-        reader.close();
-        return listoflines;
-    }
-
-    static boolean matchPattern(String name, String pattern){
-        Pattern p = Pattern.compile(pattern);
-        Matcher m = p.matcher(name);
-        return m.matches();
-    }
-
 
 
 }
