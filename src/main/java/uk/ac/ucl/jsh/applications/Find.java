@@ -1,6 +1,7 @@
 package uk.ac.ucl.jsh.applications;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.file.Paths;
@@ -15,7 +16,7 @@ import uk.ac.ucl.jsh.toolkit.WorkingDr;
 public class Find implements Application{
 
 	@Override
-    public void exec(ArrayList<String> appArgs, OutputStream output) throws IOException {
+    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(output);
         File path;
         String pattern;

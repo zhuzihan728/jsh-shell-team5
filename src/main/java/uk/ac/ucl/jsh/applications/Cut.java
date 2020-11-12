@@ -1,6 +1,7 @@
 package uk.ac.ucl.jsh.applications;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import uk.ac.ucl.jsh.toolkit.PatternMatcher;
 public class Cut implements Application{
     
 	@Override
-    public void exec(ArrayList<String> appArgs, OutputStream output) throws IOException {
+    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(output);
         String cutpat = "((\\d*[1-9]+\\d*)|(-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-))(,((\\d*[1-9]+\\d*)|(-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-)))*";
         if (appArgs.size() < 2) {
@@ -23,7 +24,7 @@ public class Cut implements Application{
             if(appArgs.get(0).equals("-b")){
                 String option = appArgs.get(1);
                     if (PatternMatcher.matchPattern(option, cutpat)){
-                        stdinToShell(writer, option);
+                        writeToShell(new Scanner(input), writer, option);
                     }
                     else{
                         throw new RuntimeException("cut: wrong option argument");
@@ -39,7 +40,7 @@ public class Cut implements Application{
                 String option = appArgs.get(1);
                 if (PatternMatcher.matchPattern(option, cutpat)){
                     String cutArg = appArgs.get(2);
-                    try{cutfileToShell(InputReader.read_file(cutArg), writer, option);}
+                    try{writeToShell(InputReader.file_reader(cutArg), writer, option);}
                     catch(IOException e){throw new RuntimeException("uniq: cannot open " + cutArg);}
                     catch(RuntimeException e){throw new RuntimeException("uniq: " + cutArg + " does not exist");}
                 }
@@ -121,8 +122,7 @@ public class Cut implements Application{
         return out;
     }
 
-    static void stdinToShell(OutputStreamWriter writer, String option)  throws IOException{
-        Scanner in = new Scanner(System.in);//do not close
+    static void writeToShell(Scanner in, OutputStreamWriter writer, String option)  throws IOException{
         ArrayList<Integer> cutnum = optionSplit(option);
         Integer toinf = 0;
         if(cutnum.contains(Integer.MAX_VALUE)){
@@ -153,34 +153,8 @@ public class Cut implements Application{
 
     }
 
-    static void cutfileToShell(ArrayList<String> file, OutputStreamWriter writer, String option)  throws IOException{
-        ArrayList<Integer> cutnum = optionSplit(option);
-        Integer toinf = 0;
-        if(cutnum.contains(Integer.MAX_VALUE)){
-            toinf = cutnum.get(cutnum.size()-2);
-        }
-        String output;
-        for(String input : file) {
-            output = "";
-            for (Integer i:cutnum){
-                if(i > input.length()){
-                    break;
-                }
-                if(i!=toinf){
-                    output = output + String.valueOf(input.charAt(i-1));
-                }
-                else{
-                    output = output + input.substring(i);
-                    break;
-                }
-
-            }
-            writer.write(output);
-            writer.write(System.getProperty("line.separator"));
-            writer.flush();        
-        }
-
-    }
+    
+    
 
 
 }

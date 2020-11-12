@@ -71,7 +71,7 @@ public class Jsh {
             String appName = tokens.get(0);
             ArrayList<String> appArgs = new ArrayList<String>(tokens.subList(1, tokens.size()));
             AppFactory af =  new AppFactory();
-            af.getApplication(appName).exec(appArgs, output);
+            af.getApplication(appName).exec(appArgs, System.in, output);
 
         }
     }

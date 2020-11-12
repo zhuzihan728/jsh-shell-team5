@@ -1,9 +1,11 @@
 package uk.ac.ucl.jsh.applications;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import uk.ac.ucl.jsh.toolkit.InputReader;
 
@@ -11,7 +13,7 @@ import uk.ac.ucl.jsh.toolkit.InputReader;
 public class Uniq implements Application{
     
 	@Override
-    public void exec(ArrayList<String> appArgs, OutputStream output) throws IOException {
+    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(output);
         if (appArgs.size()>2){
             throw new RuntimeException("uniq: too many arguments");
@@ -37,7 +39,7 @@ public class Uniq implements Application{
         }
         if(uniqArg != null) {
             try{
-                writeToShell(InputReader.read_file(uniqArg), writer, ignoreCase);
+                writeToShell(InputReader.fileContent_List(uniqArg), writer, ignoreCase);
             }
             catch(IOException e){ throw new RuntimeException("sort: cannot open " + uniqArg); }
             catch(RuntimeException e){ throw new RuntimeException("sort: " + uniqArg + " does not exist"); }
@@ -45,7 +47,7 @@ public class Uniq implements Application{
         }
         else{
             try{
-                writeToShell(InputReader.read_stdin(), writer, ignoreCase);
+                writeToShell(InputReader.input_List(new Scanner(input)), writer, ignoreCase);
             }
             catch (IOException e){ throw new RuntimeException("sort: " + e.getMessage()); }
             

@@ -1,6 +1,7 @@
 package uk.ac.ucl.jsh.applications;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class Grep implements Application{
 
     
 	@Override
-    public void exec(ArrayList<String> appArgs, OutputStream output) throws IOException {
+    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(output);
         if (appArgs.size() < 1) {
             throw new RuntimeException("grep: wrong number of arguments");
@@ -36,11 +37,10 @@ public class Grep implements Application{
         else{
             String fileName;
             boolean moreFiles = appArgs.size() > 2;
-            ArrayList<String> lines = new ArrayList<>();
             for (int i = 1; i<appArgs.size(); i++){
                 fileName = appArgs.get(i);
                 try{
-                    for (String a:InputReader.read_file(fileName)){
+                    for (String a:InputReader.fileContent_List(fileName)){
                         if (PatternMatcher.findPattern(a, pattern)){
                             if(moreFiles){
                                 writer.write(fileName);

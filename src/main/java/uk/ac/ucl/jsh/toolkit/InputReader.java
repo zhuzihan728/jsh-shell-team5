@@ -1,6 +1,5 @@
 package uk.ac.ucl.jsh.toolkit;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -11,21 +10,20 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class InputReader {
-    public static ArrayList<String> read_stdin() {
-        Scanner in = new Scanner(System.in);//do not close
+    public static ArrayList<String> input_List(Scanner in) {
         ArrayList<String> listoflines = new ArrayList<>();
-        while(in.hasNext()) {
+        while(in.hasNextLine()) {
             listoflines.add(in.nextLine());
         }
         return listoflines;
     }
 
 
-    public static BufferedReader file_reader(String file) throws IOException {
+    public static Scanner file_reader(String file) throws IOException {
         Path filePath = Paths.get(WorkingDr.getInstance().getWD()).resolve(file);
         if (Files.exists(filePath)){
             Charset encoding = StandardCharsets.UTF_8;
-            BufferedReader reader = Files.newBufferedReader(filePath, encoding);
+            Scanner reader = new Scanner(filePath, encoding);
             return reader;
         }
         else{
@@ -34,18 +32,11 @@ public class InputReader {
 
     }
 
-
-
-    public static ArrayList<String> read_file(String file) throws IOException {
-        BufferedReader reader = file_reader(file);
-        ArrayList<String> listoflines = new ArrayList<>();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            listoflines.add(line);
-        }
-        reader.close();
-        return listoflines;
+    public static ArrayList<String> fileContent_List(String file) throws IOException {
+        return input_List(file_reader(file));
     }
+
+
 
     
 }

@@ -1,10 +1,13 @@
 package uk.ac.ucl.jsh.applications;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Scanner;
+
 import uk.ac.ucl.jsh.toolkit.InputReader;
 
 
@@ -12,7 +15,7 @@ import uk.ac.ucl.jsh.toolkit.InputReader;
 public class Sort implements Application{
     
 	@Override
-    public void exec(ArrayList<String> appArgs, OutputStream output) throws IOException {
+    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws IOException {
         OutputStreamWriter writer = new OutputStreamWriter(output);
         if (appArgs.size()>2) {
             throw new RuntimeException("sort: too many arguments");
@@ -39,7 +42,7 @@ public class Sort implements Application{
         }
         if(sortArg != null) {
             try{
-                writeToShell(InputReader.read_file(sortArg), writer, reverse);
+                writeToShell(InputReader.fileContent_List(sortArg), writer, reverse);
             }
             catch(IOException e){ throw new RuntimeException("sort: cannot open " + sortArg); }
             catch(RuntimeException e){ throw new RuntimeException("sort: " + sortArg + " does not exist"); }
@@ -47,7 +50,7 @@ public class Sort implements Application{
         }
         else{
             try{
-                writeToShell(InputReader.read_stdin(), writer, reverse);
+                writeToShell(InputReader.input_List(new Scanner(input)), writer, reverse);
             }
             catch (IOException e){ throw new RuntimeException("sort: " + e.getMessage()); }
             
