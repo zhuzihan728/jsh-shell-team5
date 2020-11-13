@@ -2,6 +2,7 @@ package uk.ac.ucl.jsh.command;
 
 import uk.ac.ucl.jsh.JshCaller;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -15,10 +16,10 @@ public class Sequence implements Command {
 
     public Command getFirst(){return first;}
 
-    public Command getSecond(){return first;}
+    public Command getSecond(){return second;}
 
     @Override
-    public void eval(Command cmdline, InputStream inputStream, OutputStream output) {
-
+    public void eval(JshCaller cmdline, InputStream input, OutputStream output) throws IOException {
+        cmdline.call(this,input,output);
     }
 }

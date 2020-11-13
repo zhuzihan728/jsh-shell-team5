@@ -1,5 +1,8 @@
 package uk.ac.ucl.jsh.command;
 
+import uk.ac.ucl.jsh.JshCaller;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -11,8 +14,16 @@ public class Pipe implements Command {
         this.right = right;
     }
 
-    @Override
-    public void eval(Command cmdline, InputStream inputStream, OutputStream output) {
+    public Command getLeft(){
+        return left;
+    }
 
+    public Command getRight(){
+        return right;
+    }
+
+    @Override
+    public void eval(JshCaller caller, InputStream input, OutputStream output) throws IOException {
+        caller.call(this,input,output);
     }
 }

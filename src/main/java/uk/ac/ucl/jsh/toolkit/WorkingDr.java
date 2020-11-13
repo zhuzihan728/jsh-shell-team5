@@ -10,10 +10,6 @@ public final class WorkingDr{
         this.setWD(workingDirectoryPath);
     }
 
-    /**
-     * Getter function for the FileSystem instance
-     * @return The reference to the only instance of the FileSystem class
-     */
     public static WorkingDr getInstance() {
         return INSTANCE;
     }

@@ -1,5 +1,9 @@
 package uk.ac.ucl.jsh.command;
 
+import uk.ac.ucl.jsh.JshCaller;
+import uk.ac.ucl.jsh.applications.Application;
+
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -11,9 +15,11 @@ public class Call implements Command {
     }
 
     @Override
-    public void eval(Command cmdline, InputStream inputStream, OutputStream output) {
-
+    public void eval(JshCaller cmdline, InputStream input, OutputStream output) throws IOException {
+        cmdline.call(this,input,output);
     }
-//    private Application application;
 
+    public String getString(){
+        return call;
+    }
 }

@@ -16,14 +16,14 @@ public class Grep implements Application{
     
 	@Override
     public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws IOException {
-        OutputStreamWriter writer = new OutputStreamWriter(output);
+	    OutputStreamWriter writer = new OutputStreamWriter(output);
         if (appArgs.size() < 1) {
             throw new RuntimeException("grep: wrong number of arguments");
         }
         String pattern = appArgs.get(0);
         if(appArgs.size()==1){
             String line;
-            Scanner in = new Scanner(System.in);
+            Scanner in = new Scanner(input);
             while(in.hasNext()) {
                 line = in.nextLine();
                 if (PatternMatcher.findPattern(line,pattern)){

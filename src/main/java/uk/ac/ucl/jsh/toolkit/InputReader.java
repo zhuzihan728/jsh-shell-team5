@@ -1,5 +1,6 @@
 package uk.ac.ucl.jsh.toolkit;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -29,14 +30,22 @@ public class InputReader {
         else{
             throw new RuntimeException();
         }
-
     }
 
     public static ArrayList<String> fileContent_List(String file) throws IOException {
         return input_List(file_reader(file));
     }
 
+    public static File getFile(String filename){
+        return new File(getFilepath(filename));
+    }
+
+    private static String getFilepath(String fileName){
+        return WorkingDr.getInstance().getWD() + System.getProperty("file.separator")
+                + fileName;
+    }
 
 
-    
+
+
 }

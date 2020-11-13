@@ -1,20 +1,6 @@
-grammar JshGrammar;
+grammar CallGrammar;
 
-/*
- * Parser Rules
- */
-cmdline : seq EOF
-        | command EOF;
-
-command : pipe
-        | call
-        ;
-seq : seq ';' command #SeqBase
-    | cmd1 = command ';' cmd2 = command #SeqRecur
-    ;
-pipe : call1 = call '|' call2 = call #CallOnlyPipe
-     | pipe '|' call #MultiCallPipe
-     ;
+call_cmd : call EOF;
 call : ' '? (redirection ' ')*? argument (' ' atom)*? ' '?
      ;
 atom : redirection
@@ -33,8 +19,7 @@ unquoted : NONSPECIAL
 /*
  * Lexer Rules
  */
-
 NONSPECIAL : ~[ \t"'`\n\r;|><]+;
 DOUBLEQUOTED : '"' (~'"')* '"';
 SINGLEQUOTED : '\'' (~'\'')* '\'';
-BACKQUOTED : '`' (~'\'')* '`';
+BACKQUOTED : '`' (~'`')* '`';

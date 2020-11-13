@@ -2,20 +2,50 @@ package uk.ac.ucl.jsh;
 
 import uk.ac.ucl.jsh.command.Command;
 import uk.ac.ucl.jsh.parser.CmdLineParser;
+import uk.ac.ucl.jsh.toolkit.WorkingDr;
 
-import java.io.InputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Scanner;
 
 public class JshMain {
-    private static void runJsh(String cmdLine, InputStream input){
+    public static void runJsh(String cmdLine, OutputStream output) throws IOException {
         CmdLineParser parser = new CmdLineParser(cmdLine);
         parser.parse();
         Command cmdline = parser.getCmdLine();
-        cmdline.eval(cmdline,input, System.out);
+        cmdline.eval(new JshCaller(), null,output);
     }
 
     public static void main(String[] args) {
-        String cmdline = new Scanner(System.in).nextLine();
-        runJsh(cmdline, System.in);
+        if (args.length > 0) {
+            if (args.length != 2) {
+                System.out.println("jsh: wrong number of arguments");
+                return;
+            }
+            if (!args[0].equals("-c")) {
+                System.out.println("jsh: " + args[0] + ": unexpected argument");
+            }
+            try {
+                runJsh(args[1], System.out);
+            } catch (Exception e) {
+                System.out.println("jsh: " + e.getMessage());
+            }
+        } else {
+            Scanner input = new Scanner(System.in);
+            try {
+                while (true) {
+                    String prompt = WorkingDr.getInstance().getWD() + "> ";
+                    System.out.print(prompt);
+                    try {
+                        String cmdline = input.nextLine();
+                        runJsh(cmdline, System.out);
+                    } catch (Exception e) {
+                        System.out.println("jsh: " + e.getMessage());
+                    }
+                }
+            } finally {
+                input.close();
+            }
+        }
     }
 }
