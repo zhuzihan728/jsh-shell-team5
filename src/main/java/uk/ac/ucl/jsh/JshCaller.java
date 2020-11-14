@@ -55,7 +55,7 @@ public class JshCaller implements CommandCaller{
         }
         AppFactory af =  new AppFactory();
         af.getApplication(arguments.get(0))
-                .exec(new ArrayList<>(arguments.subList(1, tokens.size()-1)), call_input, call_output);
+                .exec(new ArrayList<>(arguments.subList(1, arguments.size())), call_input, call_output);
         return null;
     }
 
