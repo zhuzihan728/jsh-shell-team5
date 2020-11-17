@@ -13,7 +13,7 @@ public class JshMain {
         CmdLineParser parser = new CmdLineParser(cmdLine);
         parser.parse();
         Command cmdline = parser.getCmdLine();
-        cmdline.eval(new JshCaller(), null,output);
+        cmdline.eval(new JshCaller(), System.in,output);
     }
 
     public static void main(String[] args) {
@@ -40,7 +40,8 @@ public class JshMain {
                         String cmdline = input.nextLine();
                         runJsh(cmdline, System.out);
                     } catch (Exception e) {
-                        System.out.println("jsh: " + e.getMessage());
+                        System.err.println("jsh: " + e.getMessage());
+                        break;
                     }
                 }
             } finally {
