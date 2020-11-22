@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Tail extends Head{ 
     
     @Override
-    public void writeToshell(ArrayList<String> lines, int headLines, OutputStreamWriter writer) throws IOException {
+    public void writeToShell(ArrayList<String> lines, int headLines, OutputStreamWriter writer) throws IOException {
         int limit = headLines;
         if(headLines>lines.size()){
             limit = lines.size();
@@ -21,4 +21,8 @@ public class Tail extends Head{
         }
     }
     
+    @Override
+    public String getName(){
+        return "tail";
+    }
 }

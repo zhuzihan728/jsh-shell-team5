@@ -5,26 +5,37 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import uk.ac.ucl.jsh.toolkit.JshException;
 import uk.ac.ucl.jsh.toolkit.WorkingDr;
 
 import java.io.File;
 
 public class Cd implements Application{
 
-	@Override
-    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws IOException {
+    private void checkArguements(ArrayList<String> appArgs) throws JshException {
         if (appArgs.isEmpty()) {
-            throw new RuntimeException("cd: missing argument");
-        } else if (appArgs.size() > 1) {
-            throw new RuntimeException("cd: too many arguments");
+            throw new JshException("cd: missing arguement");
         }
-        ///////////
+        else if (appArgs.size() > 1){
+            throw new JshException("cd: too many arguements");
+        }
+    }
+
+
+	@Override
+    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
+        checkArguements(appArgs);
         String dirString = appArgs.get(0);
         File dir = new File(WorkingDr.getInstance().getWD(), dirString);
         if (!dir.exists() || !dir.isDirectory()) {
-            throw new RuntimeException("cd: " + dirString + " is not an existing directory");
+            throw new JshException("cd: " + dirString + " is not an existing directory");
         }
-        WorkingDr.getInstance().setWD(dir.getCanonicalPath()); 
+        try {
+            WorkingDr.getInstance().setWD(dir.getCanonicalPath());
+        } catch (IOException e) {
+            throw new JshException("cd: " + e.getMessage());
+        }
 
     }
+ 
 }

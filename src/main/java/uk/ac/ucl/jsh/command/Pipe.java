@@ -1,8 +1,8 @@
 package uk.ac.ucl.jsh.command;
 
 import uk.ac.ucl.jsh.JshCaller;
+import uk.ac.ucl.jsh.toolkit.JshException;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -23,7 +23,7 @@ public class Pipe implements Command {
     }
 
     @Override
-    public void eval(JshCaller caller, InputStream input, OutputStream output) throws IOException {
+    public void eval(JshCaller caller, InputStream input, OutputStream output) throws JshException {
         caller.call(this,input,output);
     }
 }

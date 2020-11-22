@@ -8,31 +8,46 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import uk.ac.ucl.jsh.toolkit.InputReader;
+import uk.ac.ucl.jsh.toolkit.JshException;
 import uk.ac.ucl.jsh.toolkit.PatternMatcher;
 
 
 public class Grep implements Application{
+    private String pattern;
+    private Boolean read_input = false;
+    private void checkArguements(ArrayList<String> appArgs, InputStream input) throws JshException {
+        if (appArgs.isEmpty()) {
+            throw new JshException("grep: missing argument");
+        }
+        else if (appArgs.size() == 1 ){
+            if (input == null){
+                throw new JshException("grep: missing InputStream");
+            }
+            read_input = true;
+        }
+        pattern = appArgs.get(0);
+    }
 
     
 	@Override
-    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws IOException {
+    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
+        checkArguements(appArgs, input);
 	    OutputStreamWriter writer = new OutputStreamWriter(output);
-        if (appArgs.size() < 1) {
-            throw new RuntimeException("grep: wrong number of arguments");
-        }
-        String pattern = appArgs.get(0);
-        if(appArgs.size()==1){
+        if(read_input){
             String line;
             Scanner in = new Scanner(input);
             while(in.hasNext()) {
                 line = in.nextLine();
                 if (PatternMatcher.findPattern(line,pattern)){
-                    writer.write(line);
-                    writer.write(System.getProperty("line.separator"));
-                    writer.flush();
+                    try {
+                        writer.write(line);
+                        writer.write(System.getProperty("line.separator"));
+                        writer.flush();
+                    } catch (IOException e) {
+                        throw new JshException("grep: "+e.getMessage());
+                    }                  
                 }
             }
-
         }
         else{
             String fileName;
@@ -52,9 +67,7 @@ public class Grep implements Application{
                         }
                     }
                 }
-                catch(IOException e){ throw new RuntimeException("grep: cannot open " + fileName); }
-                catch(RuntimeException e){ throw new RuntimeException("grep: " + fileName + " does not exist"); }
-  
+                catch(IOException e){ throw new JshException("grep: " + e.getMessage()); } 
             }
         }
     }

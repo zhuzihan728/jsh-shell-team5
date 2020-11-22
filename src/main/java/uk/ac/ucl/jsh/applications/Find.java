@@ -8,76 +8,81 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.io.File;
 
+import uk.ac.ucl.jsh.toolkit.JshException;
 import uk.ac.ucl.jsh.toolkit.PatternMatcher;
 import uk.ac.ucl.jsh.toolkit.WorkingDr;
 
 
 
 public class Find implements Application{
+    private String path = "";
+    private String pattern;
+    private void checkArguements(ArrayList<String> appArgs, InputStream input) throws JshException {
+        if (appArgs.size() < 2) {
+            throw new JshException("find: missing arguments");
+        }
+        else if (appArgs.size() == 2){
+            if (!appArgs.get(0).equals("-name")){
+                throw new JshException("find: wrong argument " + appArgs.get(0));
+            }
+            pattern = appArgs.get(1).replace("*", ".*");
+        }
+        else if (appArgs.size() == 3){
+            if (!appArgs.get(1).equals("-name")){
+                throw new JshException("find: wrong argument " + appArgs.get(1));
+            }
+            path = appArgs.get(0);
+            pattern = appArgs.get(2).replace("*", ".*");
+        }
+        else if (appArgs.size() > 3) {
+            throw new JshException("find: too many arguments");
+        }
+    }
+
+
+
 
 	@Override
-    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws IOException {
+    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
+        checkArguements(appArgs, input);
         OutputStreamWriter writer = new OutputStreamWriter(output);
-        File path;
-        String pattern;
-        if (appArgs.isEmpty() || appArgs.size() == 1) {
-            throw new RuntimeException("find: missing argument");}              
-        else if (appArgs.size() == 2){
-            if(appArgs.get(0).equals("-name")){
-                path = new File(WorkingDr.getInstance().getWD());
-                pattern = appArgs.get(1).replaceAll("\\*", ".*");
-            }
-            else{
-                throw new RuntimeException("find: wrong arguments");}                
-        }
-        else if (appArgs.size() == 3 ){
-            if(appArgs.get(1).equals("-name")){
-                path = new File(appArgs.get(0));
-                pattern = appArgs.get(2).replaceAll("\\*", ".*");
-            }
-            else{
-                throw new RuntimeException("find: wrong arguments");} 
-        }
-        else {
-            throw new RuntimeException("find: too many arguments");
-        }
-/*                      ↑上面确定path和pattern                     */               
+        File file = new File(WorkingDr.getInstance().getWD(),path);              
         try {
-            boolean atLeastOnePrinted = getFiles(path, pattern, path, writer);                        
+            boolean atLeastOnePrinted = getFiles(file, pattern, writer);                        
             if (atLeastOnePrinted) {
                 writer.write(System.getProperty("line.separator"));
                 writer.flush();
             }
             else{
-                throw new RuntimeException("find: no such file or directory");
+                throw new JshException("find: no such file or directory");
             }
-        } catch (NullPointerException e) {
-            throw new RuntimeException("find: no such directory");
+        }  catch (IOException e) {
+            throw new JshException("find: " + e.getMessage());
         }
     }
     
-    private boolean getFiles(File file, String pattern, File path, OutputStreamWriter writer) throws IOException {
+    private boolean getFiles(File file, String pattern, OutputStreamWriter writer) throws IOException {
         boolean printed1 = false;
         boolean printed2 = false;
         File[] files = file.listFiles();
         for (File a : files) {
             if(a.getName().startsWith(".")){continue;}
             if (PatternMatcher.matchPattern(a.getName(), pattern)) {
-                writer.write(getRelative(path,a));
+                writer.write(getRelative(a));
                 writer.write("\n");
                 writer.flush();
                 printed1 = true;            
             }      
             if(a.isDirectory()){
-                if(getFiles(a,pattern,path,writer)){printed2=true;}
+                if(getFiles(a,pattern,writer)){printed2=true;}
               
             }  
         }
         return (printed1 || printed2);
     }
 
-    private String getRelative(File mother, File child){
-        String rp = Paths.get(mother.getAbsolutePath()).relativize(Paths.get(child.getAbsolutePath())).toString();
+    private String getRelative(File child){
+        String rp = Paths.get(WorkingDr.getInstance().getWD()).relativize(Paths.get(child.getAbsolutePath())).toString();
         if(rp.startsWith(File.separator)){
             return "."+ rp;
         }
@@ -85,4 +90,5 @@ public class Find implements Application{
             return "."+ File.separator + rp;
         }
     }
+
 }

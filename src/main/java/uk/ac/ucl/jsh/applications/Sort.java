@@ -9,20 +9,21 @@ import java.util.Collections;
 import java.util.Scanner;
 
 import uk.ac.ucl.jsh.toolkit.InputReader;
+import uk.ac.ucl.jsh.toolkit.JshException;
 
 
 
 public class Sort implements Application{
-    
-	@Override
-    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws IOException {
-        OutputStreamWriter writer = new OutputStreamWriter(output);
-        if (appArgs.size()>2) {
-            throw new RuntimeException("sort: too many arguments");
-        }
+    private String sortArg = null;
+    private Boolean reverse = false;
 
-        String sortArg = null;
-        Boolean reverse = false;
+    private void checkArguements(ArrayList<String> appArgs, InputStream input) throws JshException {
+        if (appArgs.size()>2) {
+            throw new JshException("sort: too many arguments");
+        }
+        if (appArgs.isEmpty()&&input==null){
+            throw new JshException("sort: missing InputStream");
+        }
         if (appArgs.size() == 1) {
             if(appArgs.get(0).equals("-r")){
                 reverse = true;
@@ -37,24 +38,22 @@ public class Sort implements Application{
                 sortArg = appArgs.get(1);
             }
             else{
-                throw new RuntimeException("sort: wrong arguments");
+                throw new JshException("sort: wrong arguments");
             }
         }
-        if(sortArg != null) {
-            try{
-                writeToShell(InputReader.fileContent_List(sortArg), writer, reverse);
+    }
+	@Override
+    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
+        checkArguements(appArgs, input);
+        OutputStreamWriter writer = new OutputStreamWriter(output);
+        try{
+            if(sortArg != null) {
+                writeToShell(InputReader.fileContent_List(sortArg), writer, reverse);     
             }
-            catch(IOException e){ throw new RuntimeException("sort: cannot open " + sortArg); }
-            catch(RuntimeException e){ throw new RuntimeException("sort: " + sortArg + " does not exist"); }
-            
-        }
-        else{
-            try{
-                writeToShell(InputReader.input_List(new Scanner(input)), writer, reverse);
+            else{
+                writeToShell(InputReader.input_List(new Scanner(input)), writer, reverse);              
             }
-            catch (IOException e){ throw new RuntimeException("sort: " + e.getMessage()); }
-            
-        }
+        } catch (IOException e){ throw new JshException("sort: " + e.getMessage()); }
     }
 
     static void writeToShell(ArrayList<String> listoflines, OutputStreamWriter writer, boolean r) throws IOException {

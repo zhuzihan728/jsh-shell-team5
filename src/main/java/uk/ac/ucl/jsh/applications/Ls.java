@@ -6,24 +6,28 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
+import uk.ac.ucl.jsh.toolkit.JshException;
 import uk.ac.ucl.jsh.toolkit.WorkingDr;
 
 import java.io.File;
 
 public class Ls implements Application{
-
-
-	@Override
-    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws IOException {
-        OutputStreamWriter writer = new OutputStreamWriter(output);
-        File currDir;
+    private File currDir;
+    private void checkArguements(ArrayList<String> appArgs, InputStream input) throws JshException {
         if (appArgs.isEmpty()) {
             currDir = new File(WorkingDr.getInstance().getWD());
         } else if (appArgs.size() == 1) {
             currDir = new File(appArgs.get(0));
         } else {
-            throw new RuntimeException("ls: too many arguments");
+            throw new JshException("ls: too many arguments");
         }
+    }
+
+
+	@Override
+    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
+        checkArguements(appArgs, input);
+        OutputStreamWriter writer = new OutputStreamWriter(output);
         try {
             File[] listOfFiles = currDir.listFiles();
             boolean atLeastOnePrinted = false;
@@ -39,9 +43,6 @@ public class Ls implements Application{
                 writer.write(System.getProperty("line.separator"));
                 writer.flush();
             }
-        } catch (NullPointerException e) {
-            throw new RuntimeException("ls: no such directory");
-        }
-
+        } catch (IOException e){throw new JshException("ls: " + e.getMessage());}
     }
 }

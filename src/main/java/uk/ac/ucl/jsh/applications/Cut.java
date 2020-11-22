@@ -8,56 +8,64 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import uk.ac.ucl.jsh.toolkit.InputReader;
+import uk.ac.ucl.jsh.toolkit.JshException;
 import uk.ac.ucl.jsh.toolkit.PatternMatcher;
 
 
 public class Cut implements Application{
-    
-	@Override
-    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws IOException {
-        OutputStreamWriter writer = new OutputStreamWriter(output);
-        String cutpat = "((\\d*[1-9]+\\d*)|(-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-))(,((\\d*[1-9]+\\d*)|(-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-)))*";
+
+    private String cutArg = null;
+    private String option;
+
+    private void checkArguements(ArrayList<String> appArgs, InputStream input) throws JshException {
         if (appArgs.size() < 2) {
-            throw new RuntimeException("cut: missing arguments");
+            throw new JshException("cut: missing arguments");
         }
         else if (appArgs.size() == 2){
-            if(appArgs.get(0).equals("-b")){
-                String option = appArgs.get(1);
-                    if (PatternMatcher.matchPattern(option, cutpat)){
-                        writeToShell(new Scanner(input), writer, option);
-                    }
-                    else{
-                        throw new RuntimeException("cut: wrong option argument");
-                    }
+            if (!appArgs.get(0).equals("-b")){
+                throw new JshException("cut: wrong argument " + appArgs.get(0));
             }
-            else{
-                throw new RuntimeException("cut: wrong argument");
+            else if (input == null){
+                throw new JshException("cut: missing InputStream");
             }
-
         }
         else if (appArgs.size() == 3){
-            if(appArgs.get(0).equals("-b")){
-                String option = appArgs.get(1);
-                if (PatternMatcher.matchPattern(option, cutpat)){
-                    String cutArg = appArgs.get(2);
-                    try{writeToShell(InputReader.file_reader(cutArg), writer, option);}
-                    catch(IOException e){throw new RuntimeException("uniq: cannot open " + cutArg);}
-                    catch(RuntimeException e){throw new RuntimeException("uniq: " + cutArg + " does not exist");}
-                }
-                else{
-                    throw new RuntimeException("cut: wrong option argument");
-                }
+            if (!appArgs.get(0).equals("-b")){
+                throw new JshException("cut: wrong argument " + appArgs.get(0));
             }
-            else{
-                throw new RuntimeException("cut: wrong arguments");
-            }
+            cutArg = appArgs.get(2);
+        }
+        else if (appArgs.size() > 3) {
+            throw new JshException("cut: too many arguments");
+        }
 
+        String cutpat = "((\\d*[1-9]+\\d*)|(-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-))(,((\\d*[1-9]+\\d*)|(-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-\\d*[1-9]+\\d*)|(\\d*[1-9]+\\d*-)))*";
+        option = appArgs.get(1);
+        if (!PatternMatcher.matchPattern(option, cutpat)){
+            throw new JshException("cut: wrong argument " + option);
         }
-        else {
-            throw new RuntimeException("uniq: too many arguments");
-        }
-                
     }
+    
+	@Override
+    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
+        checkArguements(appArgs, input);
+        OutputStreamWriter writer = new OutputStreamWriter(output);
+        if(cutArg == null){
+            try {
+                writeToShell(new Scanner(input), writer, option);
+            } catch (IOException e) {
+                throw new JshException("cut: " + e.getMessage());
+            }
+        }
+        else{
+            try{
+                writeToShell(InputReader.file_reader(cutArg), writer, option);
+            }
+            catch(IOException e){throw new JshException("cut: " + e.getMessage());}
+        }        
+    }
+
+
     static ArrayList<Integer> optionSplit(String option){
         String[] optionls = option.split(",");
         ArrayList<Integer> cutls = new ArrayList<Integer>();
@@ -152,9 +160,5 @@ public class Cut implements Application{
         }
 
     }
-
-    
-    
-
 
 }

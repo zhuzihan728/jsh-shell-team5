@@ -2,18 +2,22 @@ package uk.ac.ucl.jsh;
 
 import uk.ac.ucl.jsh.command.Command;
 import uk.ac.ucl.jsh.parser.CmdLineParser;
+import uk.ac.ucl.jsh.toolkit.JshException;
 import uk.ac.ucl.jsh.toolkit.WorkingDr;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Scanner;
 
 public class JshMain {
-    public static void runJsh(String cmdLine, OutputStream output) throws IOException {
+    public static void runJsh(String cmdLine, OutputStream output) {
         CmdLineParser parser = new CmdLineParser(cmdLine);
         parser.parse();
         Command cmdline = parser.getCmdLine();
-        cmdline.eval(new JshCaller(), System.in,output);
+        try {
+            cmdline.eval(new JshCaller(), System.in, output);
+        } catch (JshException e) {
+            System.err.println("jsh: " + e.getMessage());
+        }
     }
 
     public static void main(String[] args) {
@@ -41,7 +45,6 @@ public class JshMain {
                         runJsh(cmdline, System.out);
                     } catch (Exception e) {
                         System.err.println("jsh: " + e.getMessage());
-                        break;
                     }
                 }
             } finally {

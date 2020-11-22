@@ -8,19 +8,21 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import uk.ac.ucl.jsh.toolkit.InputReader;
+import uk.ac.ucl.jsh.toolkit.JshException;
 
 
 public class Uniq implements Application{
-    
-	@Override
-    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws IOException {
-        OutputStreamWriter writer = new OutputStreamWriter(output);
+    private String uniqArg = null;
+    private Boolean ignoreCase = false;
+
+    private void checkArguements(ArrayList<String> appArgs, InputStream input) throws JshException {
         if (appArgs.size()>2){
-            throw new RuntimeException("uniq: too many arguments");
+            throw new JshException("uniq: too many arguments");
         }
-        String uniqArg = null;
-        Boolean ignoreCase = false;
-        if (appArgs.size() == 1) {
+        if (appArgs.isEmpty()&&input==null){
+            throw new JshException("uniq: missing InputStream");
+        }
+        else if (appArgs.size() == 1) {
             if(appArgs.get(0).equals("-i")){
                 ignoreCase = true;
             }
@@ -34,25 +36,23 @@ public class Uniq implements Application{
                 uniqArg = appArgs.get(1);
             }
             else{
-                throw new RuntimeException("uniq: wrong arguments");
+                throw new RuntimeException("uniq: wrong argument" + appArgs.get(0));
             }
         }
-        if(uniqArg != null) {
-            try{
-                writeToShell(InputReader.fileContent_List(uniqArg), writer, ignoreCase);
+    }
+    
+	@Override
+    public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
+        checkArguements(appArgs, input);
+        OutputStreamWriter writer = new OutputStreamWriter(output);
+        try{
+            if(uniqArg != null) {   
+                writeToShell(InputReader.fileContent_List(uniqArg), writer, ignoreCase); 
             }
-            catch(IOException e){ throw new RuntimeException("sort: cannot open " + uniqArg); }
-            catch(RuntimeException e){ throw new RuntimeException("sort: " + uniqArg + " does not exist"); }
-            
-        }
-        else{
-            try{
+            else{
                 writeToShell(InputReader.input_List(new Scanner(input)), writer, ignoreCase);
             }
-            catch (IOException e){ throw new RuntimeException("sort: " + e.getMessage()); }
-            
-        }
-        
+        } catch (IOException e){ throw new JshException("uniq: " + e.getMessage()); }
     }
 
     static void writeToShell(ArrayList<String> listoflines, OutputStreamWriter writer, boolean i) throws IOException {
@@ -82,4 +82,5 @@ public class Uniq implements Application{
         }    
 
     }
+    
 }

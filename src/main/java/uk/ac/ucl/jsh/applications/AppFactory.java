@@ -1,10 +1,11 @@
 package uk.ac.ucl.jsh.applications;
 
+import uk.ac.ucl.jsh.toolkit.JshException;
 
 public class AppFactory {
 
 
-    public Application getApplication(String applicationType){
+    public Application getApplication(String applicationType) throws JshException {
         if(applicationType.equalsIgnoreCase("cd")){
             return new Cd();
         }
@@ -42,7 +43,7 @@ public class AppFactory {
             return new Sort();
         }
         else{
-            throw new RuntimeException(applicationType+" is not an application");
+            throw new JshException(applicationType+" is not an application");
         }
         
     }
