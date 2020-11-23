@@ -14,14 +14,14 @@ public class AppFactory {
         appMap = new HashMap<String, Application>(2);
         appMap.put("cd",new Cd());
         appMap.put("cat",new Cat());
-        appMap.put("call",new Call());
+        appMap.put("sort",new Sort());
         appMap.put("cut",new Cut());
         appMap.put("echo",new Echo());
         appMap.put("find",new Find());
         appMap.put("grep",new Grep());
         appMap.put("head",new Head());
         appMap.put("ls",new Ls());
-        appMap.put("pipe",new Pipe());
+        appMap.put("unsafe",new Unsafe(null));
         appMap.put("pwd",new Pwd());
         appMap.put("sort",new Sort());
         appMap.put("tail",new Tail());
