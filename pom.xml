@@ -47,6 +47,7 @@
         <configuration>
           <excludes>
             <exclude>**/JshGrammar*</exclude>
+            <exclude>**/CallGrammar*</exclude>
           </excludes>
         </configuration>
       </plugin>
@@ -56,7 +57,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>uk.ac.ucl.jsh.Jsh</mainClass>
+              <mainClass>uk.ac.ucl.jsh.JshMain</mainClass>
             </manifest>
           </archive>
         </configuration>
@@ -66,7 +67,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>uk.ac.ucl.jsh.Jsh</mainClass>
+              <mainClass>uk.ac.ucl.jsh.JshMain</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
