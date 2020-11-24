@@ -28,7 +28,7 @@ public class AppFactory {
         appMap.put("uniq",new Uniq());
     }
 
-    public Application buildApp(final String appType) {
+    public Application getApplication(final String appType) {
         return appMap.get(appType);
     }
 

@@ -2,6 +2,7 @@ package uk.ac.ucl.jsh;
 
 import uk.ac.ucl.jsh.command.Command;
 import uk.ac.ucl.jsh.parser.CmdLineParser;
+import uk.ac.ucl.jsh.parser.JshCaller;
 import uk.ac.ucl.jsh.toolkit.JshException;
 import uk.ac.ucl.jsh.toolkit.WorkingDr;
 
@@ -16,7 +17,7 @@ public class JshMain {
         try {
             cmdline.eval(new JshCaller(), System.in, output);
         } catch (JshException e) {
-            System.err.println("jsh: " + e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 

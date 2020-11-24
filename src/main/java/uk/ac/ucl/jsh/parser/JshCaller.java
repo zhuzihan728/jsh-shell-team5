@@ -1,5 +1,6 @@
-package uk.ac.ucl.jsh;
+package uk.ac.ucl.jsh.parser;
 
+import uk.ac.ucl.jsh.parser.CommandCaller;
 import uk.ac.ucl.jsh.call_parts.Sub_Call;
 import uk.ac.ucl.jsh.command.Call;
 import uk.ac.ucl.jsh.command.Pipe;
@@ -37,17 +38,14 @@ public class JshCaller implements CommandCaller {
         for(Sub_Call sub_call : tokens){
             switch (sub_call.getType()){
                 case("Substitution"):
-                    OutputStream outputStream = sub_call.getOutput();
-                    arguments.addAll(new ArrayList<>(Arrays.asList(outputStream.toString().trim().split(System.getProperty("line.separator")))));
+                case("BaseCall"):
+                    arguments.addAll(sub_call.get_OutputArray());
                     break;
                 case("OutputRedirection"):
                     call_output = sub_call.getOutput();
                     break;
                 case("InputRedirection"):
                     call_input = sub_call.getInput();
-                    break;
-                case("BaseCall"):
-                    arguments.add(sub_call.getString());
                     break;
             }
         }

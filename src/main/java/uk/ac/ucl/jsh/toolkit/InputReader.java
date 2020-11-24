@@ -29,7 +29,7 @@ public class InputReader {
             return reader;
         }
         else{
-            throw new NoSuchFileException(file);
+            throw new NoSuchFileException(file+ " does not exist");
         }
     }
 
