@@ -55,11 +55,11 @@ public class CallVisitor extends CallGrammarBaseVisitor<ArrayList<Sub_Call>> {
     }
 
     @Override public ArrayList<Sub_Call> visitSingleQuoted(CallGrammarParser.SingleQuotedContext ctx) {
-        return getSubCallArray(new BaseCall(ctx.getText()));
+        return getSubCallArray(new BaseCall(ctx.getText(),2));
     }
 
     @Override public ArrayList<Sub_Call> visitDoubleQuoted(CallGrammarParser.DoubleQuotedContext ctx) {
-        return getSubCallArray(new BaseCall(ctx.getText()));
+        return getSubCallArray(new BaseCall(ctx.getText(),1));
     }
 
     @Override public ArrayList<Sub_Call> visitBackQuoted(CallGrammarParser.BackQuotedContext ctx) {
@@ -67,7 +67,7 @@ public class CallVisitor extends CallGrammarBaseVisitor<ArrayList<Sub_Call>> {
     }
 
     @Override public ArrayList<Sub_Call> visitUnquoted(CallGrammarParser.UnquotedContext ctx) {
-        return getSubCallArray(new BaseCall(ctx.getText()));
+        return getSubCallArray(new BaseCall(ctx.getText(),0));
     }
 
     private ArrayList<Sub_Call> getSubCallArray(Sub_Call sub_call){

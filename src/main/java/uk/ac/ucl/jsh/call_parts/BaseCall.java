@@ -10,15 +10,16 @@ import java.util.ArrayList;
 public class BaseCall implements Sub_Call{
     private String call;
     private ArrayList<String> globbed_results;
+    private int type;
 
-    public BaseCall(String call) {
+    public BaseCall(String call,int type) {
         this.call = call;
+        this.type = type;
     }
 
     private void check_String() throws JshException {
         globbed_results = new ArrayList<>();
-        String quoted_match = "\"([^\"]*)\"|'([^']*)'";
-        if (call.matches(quoted_match)) {
+        if (this.type == 1 || this.type == 2) {
             this.globbed_results.add(call.substring(1,call.length()-1));
         }else if(call.contains("*")) {
             Globbing globbing = new Globbing(call);
