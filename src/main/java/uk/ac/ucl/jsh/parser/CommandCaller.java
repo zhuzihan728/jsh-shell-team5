@@ -1,4 +1,4 @@
-package uk.ac.ucl.jsh;
+package uk.ac.ucl.jsh.parser;
 
 import uk.ac.ucl.jsh.command.Call;
 import uk.ac.ucl.jsh.command.Pipe;

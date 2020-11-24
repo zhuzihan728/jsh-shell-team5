@@ -9,7 +9,8 @@ atom : redirection
 redirection : '<' ' '? argument #LeftRedir
             | '>' ' '? argument #RightRedir
             ;
-argument : (unquoted | quoted)+;
+argument : unquoted argument?
+         | quoted argument?;
 quoted : SINGLEQUOTED #SingleQuoted
        | DOUBLEQUOTED # DoubleQuoted
        | BACKQUOTED #BackQuoted

@@ -41,5 +41,8 @@ public class AppFactory {
 		if (!appMap.containsKey(Application)){
             throw new JshException("incorrect InputStream");
         }    
+
+    public Application getApplication(final String appType) {
+        return appMap.get(appType);
     }
 }

@@ -2,10 +2,12 @@ package uk.ac.ucl.jsh;
 
 import uk.ac.ucl.jsh.command.Command;
 import uk.ac.ucl.jsh.parser.CmdLineParser;
+import uk.ac.ucl.jsh.parser.JshCaller;
 import uk.ac.ucl.jsh.toolkit.JshException;
 import uk.ac.ucl.jsh.toolkit.WorkingDr;
 
 import java.io.OutputStream;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class JshMain {
@@ -16,7 +18,7 @@ public class JshMain {
         try {
             cmdline.eval(new JshCaller(), System.in, output);
         } catch (JshException e) {
-            System.err.println("jsh: " + e.getMessage());
+            System.err.println(e.getMessage());
         }
     }
 
@@ -43,6 +45,9 @@ public class JshMain {
                     try {
                         String cmdline = input.nextLine();
                         runJsh(cmdline, System.out);
+                    } catch (NoSuchElementException e){
+                        System.err.println(e.getMessage());
+                        break;
                     } catch (Exception e) {
                         System.err.println("jsh: " + e.getMessage());
                     }

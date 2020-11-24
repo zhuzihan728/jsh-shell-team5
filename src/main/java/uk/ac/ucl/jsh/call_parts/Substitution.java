@@ -1,17 +1,21 @@
 package uk.ac.ucl.jsh.call_parts;
 
 import uk.ac.ucl.jsh.JshMain;
+
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-
-public class Substitution implements Sub_Call {
+public class Substitution implements Sub_Call{
     private final String substitution_string;
     private OutputStream substition_output;
 
-    public Substitution(String substitution) {
-        this.substitution_string = substitution.substring(1, substitution.length() - 1);
+    public Substitution(String substitution){
+        this.substitution_string = substitution.substring(1,substitution.length()-1);
         get_output();
     }
 
@@ -42,5 +46,10 @@ public class Substitution implements Sub_Call {
     @Override
     public InputStream getInput() {
         return null;
+    }
+
+    @Override
+    public ArrayList<String> get_OutputArray() {
+        return new ArrayList<>(Arrays.asList(substition_output.toString().trim().split(System.getProperty("line.separator"))));
     }
 }

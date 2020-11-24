@@ -1,6 +1,7 @@
 package uk.ac.ucl.jsh.call_parts;
 
 import uk.ac.ucl.jsh.toolkit.InputReader;
+import uk.ac.ucl.jsh.toolkit.JshException;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -43,6 +44,11 @@ public class OutputRedirection implements Sub_Call{
 
     @Override
     public InputStream getInput() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<String> get_OutputArray() throws JshException {
         return null;
     }
 

@@ -1,6 +1,6 @@
 package uk.ac.ucl.jsh.command;
 
-import uk.ac.ucl.jsh.JshCaller;
+import uk.ac.ucl.jsh.parser.JshCaller;
 import uk.ac.ucl.jsh.toolkit.JshException;
 
 import java.io.InputStream;
