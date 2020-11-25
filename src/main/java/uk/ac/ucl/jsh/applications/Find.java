@@ -82,13 +82,24 @@ public class Find implements Application{
     }
 
     private String getRelative(File child){
-        String rp = Paths.get(WorkingDr.getInstance().getWD()).relativize(Paths.get(child.getAbsolutePath())).toString();
-        if(rp.startsWith(File.separator)){
-            return "."+ rp;
+        String rp = Paths.get(WorkingDr.getInstance().getWD(),path).relativize(Paths.get(child.getAbsolutePath())).toString();
+        if (path.equals("")){
+            if(rp.startsWith(File.separator)){
+                return "."+ rp;
+            }
+            else{
+                return "."+ File.separator + rp;
+            }
         }
         else{
-            return "."+ File.separator + rp;
+            if(rp.startsWith(File.separator)){
+                return path + rp;
+            }
+            else{
+                return path + File.separator + rp;
+            }
         }
+        
     }
 
 }

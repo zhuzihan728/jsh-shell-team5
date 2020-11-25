@@ -149,7 +149,7 @@ public class Cut implements Application{
                     output = output + String.valueOf(input.charAt(i-1));
                 }
                 else{
-                    output = output + input.substring(i);
+                    output = output + input.substring(i-1);
                     break;
                 }
 
