@@ -18,7 +18,7 @@ public class JshMain {
         try {
             cmdline.eval(new JshCaller(), System.in, output);
         } catch (JshException e) {
-            System.err.println(e.getMessage());
+            System.err.println("jsh: " + e.getMessage());
         }
     }
 

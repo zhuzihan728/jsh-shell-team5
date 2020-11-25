@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
+import uk.ac.ucl.jsh.toolkit.InputReader;
 import uk.ac.ucl.jsh.toolkit.JshException;
 import uk.ac.ucl.jsh.toolkit.WorkingDr;
 
@@ -17,7 +18,10 @@ public class Ls implements Application{
         if (appArgs.isEmpty()) {
             currDir = new File(WorkingDr.getInstance().getWD());
         } else if (appArgs.size() == 1) {
-            currDir = new File(appArgs.get(0));
+            currDir = InputReader.getFile(appArgs.get(0));
+            if (!currDir.exists()){
+                throw new JshException("ls: " + appArgs.get(0) + " does not exist");
+            }
         } else {
             throw new JshException("ls: too many arguments");
         }

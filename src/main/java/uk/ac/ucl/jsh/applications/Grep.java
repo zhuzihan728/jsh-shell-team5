@@ -36,7 +36,7 @@ public class Grep implements Application{
         if(read_input){
             String line;
             Scanner in = new Scanner(input);
-            while(in.hasNext()) {
+            while(in.hasNextLine()) {
                 line = in.nextLine();
                 if (PatternMatcher.findPattern(line,pattern)){
                     try {
