@@ -1,13 +1,17 @@
 package uk.ac.ucl.jsh.applications;
 
-
 import java.util.Map;
 
+import uk.ac.ucl.jsh.toolkit.JshException;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.io.InputStream;
 import java.lang.String;
 
 
 public class AppFactory {
+    private static final Object Application = null;
     private final Map<String, Application> appMap;
 
     public AppFactory(){
@@ -21,58 +25,24 @@ public class AppFactory {
         appMap.put("grep",new Grep());
         appMap.put("head",new Head());
         appMap.put("ls",new Ls());
-        appMap.put("unsafe",new Unsafe(null));
         appMap.put("pwd",new Pwd());
         appMap.put("sort",new Sort());
         appMap.put("tail",new Tail());
         appMap.put("uniq",new Uniq());
     }
 
+    public Application buildApp(final String appType) {
+        return appMap.get(appType.toLowerCase());
+    }
+    public final void checkAppArguements(ArrayList<String> appArgs, InputStream input) throws JshException{
+        if(appArgs.isEmpty() && input == null){
+            throw new JshException("missing InputStream");
+        }
+		if (!appMap.containsKey(Application)){
+            throw new JshException("incorrect InputStream");
+        }    
+
     public Application getApplication(final String appType) {
         return appMap.get(appType);
     }
-
-
-    // public Application getApplication(String applicationType){
-    //     if(applicationType == null){
-    //         return null;
-    //     }
-    //     if(applicationType.equalsIgnoreCase("cd")){
-    //         return new Cd();
-    //     }
-    //     else if(applicationType.equalsIgnoreCase("pwd")){
-    //         return new Pwd();
-    //     }
-    //     else if(applicationType.equalsIgnoreCase("ls")){
-    //         return new Ls();
-    //     }
-    //     else if(applicationType.equalsIgnoreCase("cat")){
-    //         return new Cat();
-    //     }
-    //     else if(applicationType.equalsIgnoreCase("echo")){
-    //         return new Echo();
-    //     }
-    //     else if(applicationType.equalsIgnoreCase("head")){
-    //         return new Head();
-    //     }
-    //     else if(applicationType.equalsIgnoreCase("tail")){
-    //         return new Tail();
-    //     }
-    //     else if(applicationType.equalsIgnoreCase("grep")){
-    //         return new Grep();
-    //     }
-    //     else if(applicationType.equalsIgnoreCase("cut")){
-    //         return new Cut();
-    //     }
-    //     else if(applicationType.equalsIgnoreCase("find")){
-    //         return new Find();
-    //     }
-    //     else if(applicationType.equalsIgnoreCase("uniq")){
-    //         return new Uniq();
-    //     }
-    //     else if(applicationType.equalsIgnoreCase("sort")){
-    //         return new Sort();
-    //     }
-    //     return null;
-    // }     
 }
