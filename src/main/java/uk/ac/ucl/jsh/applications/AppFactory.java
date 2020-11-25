@@ -4,14 +4,11 @@ import java.util.Map;
 
 import uk.ac.ucl.jsh.toolkit.JshException;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.io.InputStream;
 import java.lang.String;
 
 
 public class AppFactory {
-    private static final Object Application = null;
     private final Map<String, Application> appMap;
 
     public AppFactory(){
@@ -31,18 +28,11 @@ public class AppFactory {
         appMap.put("uniq",new Uniq());
     }
 
-    public Application buildApp(final String appType) {
-        return appMap.get(appType.toLowerCase());
-    }
-    public final void checkAppArguements(ArrayList<String> appArgs, InputStream input) throws JshException{
-        if(appArgs.isEmpty() && input == null){
-            throw new JshException("missing InputStream");
+    public Application getApplication(String appType) throws JshException {
+        Application app;
+        if ((app = appMap.get(appType.toLowerCase())) == null){
+            throw new JshException(appType + " is not an application");
         }
-		if (!appMap.containsKey(Application)){
-            throw new JshException("incorrect InputStream");
-        }    
-
-    public Application getApplication(final String appType) {
-        return appMap.get(appType);
+        return app;
     }
 }

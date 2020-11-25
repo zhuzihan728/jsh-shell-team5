@@ -1,8 +1,5 @@
 package uk.ac.ucl.jsh.toolkit;
 
-import uk.ac.ucl.jsh.toolkit.JshException;
-import uk.ac.ucl.jsh.toolkit.WorkingDr;
-
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
@@ -11,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class Globbing {
-    private String file_separator = System.getProperty("file.separator");
     private static final String currentDirectory = WorkingDr.getInstance().getWD();
     private ArrayList<String> globbingResult;
     private final String globbing_pattern;
