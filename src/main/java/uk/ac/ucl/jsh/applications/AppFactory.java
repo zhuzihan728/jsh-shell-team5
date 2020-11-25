@@ -34,14 +34,14 @@ public class AppFactory {
     public Application buildApp(final String appType) {
         return appMap.get(appType.toLowerCase());
     }
-    public final void checkAppArguements(ArrayList<String> appArgs, InputStream input) throws JshException{
-        if(appArgs.isEmpty() && input == null){
+    public final void checkAppArguements(ArrayList<String> appArgs, InputStream input) throws JshException {
+        if (appArgs.isEmpty() && input == null) {
             throw new JshException("missing InputStream");
         }
-		if (!appMap.containsKey(Application)){
+        if (!appMap.containsKey(Application)) {
             throw new JshException("incorrect InputStream");
-        }    
-
+        }
+    }
     public Application getApplication(final String appType) {
         return appMap.get(appType);
     }

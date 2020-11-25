@@ -1,27 +1,32 @@
 grammar CallGrammar;
 
 call_cmd : call EOF;
-call : ' '? (redirection ' ')*? argument (' ' atom)*? ' '?
-     ;
+call : WHITESPACE*? (redirection WHITESPACE+)*? argument (WHITESPACE+ atom)*?;
+
 atom : redirection
      | argument
      ;
-redirection : '<' ' '? argument #LeftRedir
-            | '>' ' '? argument #RightRedir
+redirection : '<' WHITESPACE? argument #LeftRedir
+            | '>' WHITESPACE? argument #RightRedir
             ;
 argument : unquoted argument?
          | quoted argument?;
-quoted : SINGLEQUOTED #SingleQuoted
-       | DOUBLEQUOTED # DoubleQuoted
-       | BACKQUOTED #BackQuoted
+quoted : singleQuoted
+       | doubleQuoted
+       | backQuoted
        ;
 unquoted : NONSPECIAL
          ;
+doubleQuoted : '"'doubleQuotedContent'"';
+doubleQuotedContent : doubleQuoted_part doubleQuotedContent
+                    | backQuoted doubleQuotedContent |;
+doubleQuoted_part : (NONSPECIAL|'>'|'<'|';'|'|'|WHITESPACE|'\'');
+singleQuoted : '\'' singleQuotedContent '\'';
+singleQuotedContent : (NONSPECIAL|'>'|'<'|';'|'|'|WHITESPACE|'"'|'`')*;
+backQuoted : '`' backQuotedContent '`';
+backQuotedContent: (NONSPECIAL|'>'|'<'|';'|'|'|WHITESPACE|'"'|'\'')*;
 /*
  * Lexer Rules
  */
 WHITESPACE : [ \t];
 NONSPECIAL : ~[ \t"'`\n\r;|><]+;
-DOUBLEQUOTED : '"' (~'"')* '"';
-SINGLEQUOTED : '\'' (~'\'')* '\'';
-BACKQUOTED : '`' (~'`')* '`';

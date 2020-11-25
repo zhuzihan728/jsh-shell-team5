@@ -30,7 +30,7 @@ public class Substitution implements Sub_Call{
 
     @Override
     public String getString() {
-        return null;
+        return substition_output.toString().trim();
     }
 
     @Override

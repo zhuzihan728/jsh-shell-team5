@@ -49,7 +49,7 @@ public class CallVisitor extends CallGrammarBaseVisitor<ArrayList<Sub_Call>> {
             returns.addAll(visit(ctx.quoted()));
         }
         if(ctx.argument() != null){
-            returns.addAll(visit(ctx.argument()));
+            glue_lists(returns,visit(ctx.argument()));
         }
         return returns;
     }
@@ -59,7 +59,25 @@ public class CallVisitor extends CallGrammarBaseVisitor<ArrayList<Sub_Call>> {
     }
 
     @Override public ArrayList<Sub_Call> visitDoubleQuoted(CallGrammarParser.DoubleQuotedContext ctx) {
-        return getSubCallArray(new BaseCall(ctx.getText(),1));
+        return visit(ctx.doubleQuotedContent());
+    }
+
+    @Override public ArrayList<Sub_Call> visitDoubleQuotedContent(CallGrammarParser.DoubleQuotedContentContext ctx) {
+        ArrayList<Sub_Call> returns = new ArrayList<>();
+        if(ctx.doubleQuoted_part() != null){
+            glue_lists(returns,visit(ctx.doubleQuoted_part()));
+        }
+        if(ctx.backQuoted() != null){
+            glue_lists(returns,visit(ctx.backQuoted()));
+        }
+        if(ctx.doubleQuotedContent()!=null){
+            glue_lists(returns,visit(ctx.doubleQuotedContent()));
+        }
+        return returns;
+    }
+
+    @Override public ArrayList<Sub_Call> visitDoubleQuoted_part(CallGrammarParser.DoubleQuoted_partContext ctx) {
+        return getSubCallArray(new BaseCall(ctx.getText(),0));
     }
 
     @Override public ArrayList<Sub_Call> visitBackQuoted(CallGrammarParser.BackQuotedContext ctx) {
@@ -76,4 +94,20 @@ public class CallVisitor extends CallGrammarBaseVisitor<ArrayList<Sub_Call>> {
         return returns;
     }
 
+    private void glue_lists(ArrayList<Sub_Call> prev, ArrayList<Sub_Call> appended){
+        if(prev.isEmpty()){
+            prev.addAll(appended);
+            return;
+        }
+
+        if(appended.isEmpty()){
+            return;
+        }
+        prev.set(prev.size()-1,
+                new BaseCall(prev.get(prev.size()-1).getString()
+                + appended.get(0).getString(),0));
+        if(appended.size()>1){
+            prev.addAll(appended.subList(1,appended.size()-1));
+        }
+    }
 }
