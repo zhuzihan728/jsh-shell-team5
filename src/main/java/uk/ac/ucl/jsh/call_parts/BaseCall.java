@@ -6,28 +6,27 @@ import uk.ac.ucl.jsh.toolkit.JshException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BaseCall implements Sub_Call{
-    private String call;
+    private final String call;
     private ArrayList<String> globbed_results;
-    private int type;
+    private final int type;
 
     public BaseCall(String call,int type) {
         this.call = call;
         this.type = type;
+        check_String();
     }
 
-    private void check_String() throws JshException {
+    private void check_String(){
         globbed_results = new ArrayList<>();
-        if (this.type == 1 || this.type == 2) {
-            this.globbed_results.add(call.substring(1,call.length()-1));
+        if (this.type == 2) {
+            this.globbed_results.add(call.substring(1, call.length() - 1));
         }else if(call.contains("*")) {
             Globbing globbing = new Globbing(call);
-            if (globbing.exist_globbing()) {
-                this.globbed_results = globbing.getGlobbed_results();
-            }else{
-                this.globbed_results.add(call);
-            }
+            this.globbed_results = globbing.getGlobbed_results();
         }else{
             this.globbed_results.add(call);
         }
@@ -35,7 +34,7 @@ public class BaseCall implements Sub_Call{
 
     @Override
     public String getString() {
-        return null;
+        return arrayToString();
     }
 
     @Override
@@ -54,8 +53,19 @@ public class BaseCall implements Sub_Call{
     }
 
     @Override
-    public ArrayList<String> get_OutputArray() throws JshException {
-        check_String();
+    public ArrayList<String> get_OutputArray(){
         return globbed_results;
     }
+
+    private String arrayToString(){
+        StringBuilder builder = new StringBuilder();
+        for(String str: globbed_results){
+            builder.append(str).append(' ');
+        }
+        String returns = builder.toString();
+        returns = returns.substring(0,returns.length()-1);
+        return returns;
+    }
+
+
 }

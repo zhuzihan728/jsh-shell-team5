@@ -11,38 +11,32 @@ public class Globbing {
     private static final String currentDirectory = WorkingDr.getInstance().getWD();
     private ArrayList<String> globbingResult;
     private final String globbing_pattern;
-    private boolean exist_globbing;
 
 
-    public Globbing(String globbing_path) throws JshException {
+    public Globbing(String globbing_path){
         this.globbing_pattern = globbing_path;
         get_globbed();
     }
 
-    private void get_globbed() throws JshException {
-        exist_globbing = true;
+    private void get_globbed(){
         globbingResult = new ArrayList<>();
         Path dir = Paths.get(currentDirectory);
         DirectoryStream<Path> stream;
         try {
             stream = Files.newDirectoryStream(dir, globbing_pattern);
         }catch (IOException e){
-            throw new JshException(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
         for (Path entry : stream) {
             globbingResult.add(entry.getFileName().toString());
         }
         if (globbingResult.isEmpty()) {
-            exist_globbing = false;
+            globbingResult.add(globbing_pattern);
         }
     }
 
     public ArrayList<String> getGlobbed_results() {
         return globbingResult;
-    }
-
-    public boolean exist_globbing(){
-        return exist_globbing;
     }
 
 }
