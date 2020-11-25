@@ -20,6 +20,7 @@ unquoted : NONSPECIAL
 /*
  * Lexer Rules
  */
+WHITESPACE : [ \t];
 NONSPECIAL : ~[ \t"'`\n\r;|><]+;
 DOUBLEQUOTED : '"' (~'"')* '"';
 SINGLEQUOTED : '\'' (~'\'')* '\'';

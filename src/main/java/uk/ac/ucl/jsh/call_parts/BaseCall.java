@@ -35,7 +35,7 @@ public class BaseCall implements Sub_Call{
 
     @Override
     public String getString() {
-        return null;
+        return call;
     }
 
     @Override
