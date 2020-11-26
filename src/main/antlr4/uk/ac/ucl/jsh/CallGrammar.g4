@@ -1,7 +1,7 @@
 grammar CallGrammar;
 
 call_cmd : call EOF;
-call : WHITESPACE*? (redirection WHITESPACE+)*? argument (WHITESPACE+ atom)*?;
+call : WHITESPACE*? (redirection WHITESPACE+)*? argument (WHITESPACE+ atom)*? WHITESPACE*?;
 
 atom : redirection
      | argument

@@ -15,26 +15,32 @@ seq : seq ';' command #SeqBase
 pipe : call1 = call '|' call2 = call #CallOnlyPipe
      | pipe '|' call #MultiCallPipe
      ;
-call : ' '? (redirection ' ')*? argument (' ' atom)*? ' '?
-     ;
+call : WHITESPACE*? (redirection WHITESPACE+)*? argument (WHITESPACE+ atom)*? WHITESPACE*?;
+
 atom : redirection
      | argument
      ;
-redirection : '<' ' '? argument #LeftRedir
-            | '>' ' '? argument #RightRedir
+redirection : '<' WHITESPACE? argument #LeftRedir
+            | '>' WHITESPACE? argument #RightRedir
             ;
-argument : (unquoted | quoted)+;
-quoted : SINGLEQUOTED #SingleQuoted
-       | DOUBLEQUOTED # DoubleQuoted
-       | BACKQUOTED #BackQuoted
+argument : unquoted argument?
+         | quoted argument?;
+quoted : singleQuoted
+       | doubleQuoted
+       | backQuoted
        ;
 unquoted : NONSPECIAL
          ;
+doubleQuoted : '"'doubleQuotedContent'"';
+doubleQuotedContent : doubleQuoted_part doubleQuotedContent
+                    | backQuoted doubleQuotedContent |;
+doubleQuoted_part : (NONSPECIAL|'>'|'<'|';'|'|'|WHITESPACE|'\'');
+singleQuoted : '\'' singleQuotedContent '\'';
+singleQuotedContent : (NONSPECIAL|'>'|'<'|';'|'|'|WHITESPACE|'"'|'`')*;
+backQuoted : '`' backQuotedContent '`';
+backQuotedContent: (NONSPECIAL|'>'|'<'|';'|'|'|WHITESPACE|'"'|'\'')*;
 /*
  * Lexer Rules
  */
-
+WHITESPACE : [ \t];
 NONSPECIAL : ~[ \t"'`\n\r;|><]+;
-DOUBLEQUOTED : '"' (~'"')* '"';
-SINGLEQUOTED : '\'' (~'\'')* '\'';
-BACKQUOTED : '`' (~'\'')* '`';
