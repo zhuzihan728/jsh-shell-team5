@@ -10,19 +10,19 @@ import uk.ac.ucl.jsh.toolkit.WorkingDr;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
-
 public class EchoTest {
-    // private static ByteArrayOutputStream out;
-    private static ArrayList<String> appArgs = new ArrayList();
+    private static ArrayList<String> appArgs = new ArrayList<>();
     private static WorkingDr workingDir;
     private static String initWorkingDir;
     private static final Echo ECHO = new Echo();
+    private static ByteArrayOutputStream out;
 
     @BeforeClass
     public static void SetTest() {
-        // out = new ByteArrayOutputStream();
+        out = new ByteArrayOutputStream();
         workingDir = WorkingDr.getInstance();
         initWorkingDir = workingDir.getWD();
         workingDir.setWD("user.dir");
@@ -30,36 +30,33 @@ public class EchoTest {
 
     @Test
     public void testFreeSingle() throws Exception {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         appArgs.add("foo");
         ECHO.exec(appArgs, System.in, out);
-        assertEquals("foo"+System.getProperty("line.separator"), out.toString());
+        assertEquals("foo" + System.getProperty("line.separator"), out.toString());
     }
 
     @Test
     public void testFreeMulti() throws Exception {
         appArgs.clear();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        out.reset();
         appArgs.add("first");
         appArgs.add("second");
         appArgs.add("third");
         ECHO.exec(appArgs, System.in, out);
-        assertEquals("first second third"+System.getProperty("line.separator"), out.toString());
+        assertEquals("first second third" + System.getProperty("line.separator"), out.toString());
     }
 
     @Test
     public void testNull() throws Exception {
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
         appArgs.clear();
+        out.reset();
         ECHO.exec(appArgs, null, out);
         assertEquals("", out.toString());
     }
 
     @AfterClass
-    public static void EndTest() {
+    public static void EndTest() throws IOException {
+        out.close();
         workingDir.setWD(initWorkingDir);
     }
-}  
-     
-
-
+}
