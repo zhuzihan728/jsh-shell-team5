@@ -1,0 +1,65 @@
+package uk.ac.ucl.jsh;
+
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import uk.ac.ucl.jsh.applications.Echo;
+import uk.ac.ucl.jsh.toolkit.WorkingDr;
+
+import static org.junit.Assert.*;
+
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+
+
+public class EchoTest {
+    // private static ByteArrayOutputStream out;
+    private static ArrayList<String> appArgs = new ArrayList();
+    private static WorkingDr workingDir;
+    private static String initWorkingDir;
+    private static final Echo ECHO = new Echo();
+
+    @BeforeClass
+    public static void SetTest() {
+        // out = new ByteArrayOutputStream();
+        workingDir = WorkingDr.getInstance();
+        initWorkingDir = workingDir.getWD();
+        workingDir.setWD("user.dir");
+    }
+
+    @Test
+    public void testFreeSingle() throws Exception {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        appArgs.add("foo");
+        ECHO.exec(appArgs, System.in, out);
+        assertEquals("foo"+System.getProperty("line.separator"), out.toString());
+    }
+
+    @Test
+    public void testFreeMulti() throws Exception {
+        appArgs.clear();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        appArgs.add("first");
+        appArgs.add("second");
+        appArgs.add("third");
+        ECHO.exec(appArgs, System.in, out);
+        assertEquals("first second third"+System.getProperty("line.separator"), out.toString());
+    }
+
+    @Test
+    public void testNull() throws Exception {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        appArgs.clear();
+        ECHO.exec(appArgs, null, out);
+        assertEquals("", out.toString());
+    }
+
+    @AfterClass
+    public static void EndTest() {
+        workingDir.setWD(initWorkingDir);
+    }
+}  
+     
+
+
