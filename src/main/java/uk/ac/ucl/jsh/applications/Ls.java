@@ -12,14 +12,31 @@ import uk.ac.ucl.jsh.toolkit.WorkingDr;
 
 import java.io.File;
 
-public class Ls implements Application{
+/**
+ * The ls application implements Application, it lists the content of a
+ * directory
+ */
+public class Ls implements Application {
+    /**
+     * the reference to the directory whose content is to be listed
+     */
     private File currDir;
-    private void checkArguements(ArrayList<String> appArgs, InputStream input) throws JshException {
+
+    /**
+     * a method which checks whether the arguments for the application is legal and
+     * the input stream is not null if it is used for reading input
+     * 
+     * @param appArgs The arguments for the application
+     * @param input   The stream where the application reads the input
+     * @throws JshException The custom exception that Jsh shell throws if an error
+     *                      occurs
+     */
+    private void checkArguments(ArrayList<String> appArgs, InputStream input) throws JshException {
         if (appArgs.isEmpty()) {
             currDir = new File(WorkingDr.getInstance().getWD());
         } else if (appArgs.size() == 1) {
             currDir = InputReader.getFile(appArgs.get(0));
-            if (!currDir.exists()){
+            if (!currDir.exists()) {
                 throw new JshException("ls: " + appArgs.get(0) + " does not exist");
             }
         } else {
@@ -27,10 +44,19 @@ public class Ls implements Application{
         }
     }
 
-
-	@Override
+    /**
+     * a method that executes the application ls
+     * 
+     * @param appArgs The arguments for the application
+     * @param input   The stream where the application reads the input, not used for
+     *                this application
+     * @param output  The stream where the application writes the output
+     * @throws JshException The custom exception that Jsh shell throws if an error
+     *                      occurs
+     */
+    @Override
     public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
-        checkArguements(appArgs, input);
+        checkArguments(appArgs, input);
         OutputStreamWriter writer = new OutputStreamWriter(output);
         try {
             File[] listOfFiles = currDir.listFiles();
@@ -47,6 +73,8 @@ public class Ls implements Application{
                 writer.write(System.getProperty("line.separator"));
                 writer.flush();
             }
-        } catch (IOException e){throw new JshException("ls: " + e.getMessage());}
+        } catch (IOException e) {
+            throw new JshException("ls: " + e.getMessage());
+        }
     }
 }

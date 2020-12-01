@@ -6,7 +6,7 @@ import uk.ac.ucl.jsh.command.Call;
 import uk.ac.ucl.jsh.command.Pipe;
 import uk.ac.ucl.jsh.command.Sequence;
 import uk.ac.ucl.jsh.parser.CmdLineParser;
-import uk.ac.ucl.jsh.toolkit.AppMaker;
+import uk.ac.ucl.jsh.toolkit.AppExecutor;
 import uk.ac.ucl.jsh.toolkit.JshException;
 
 import java.io.*;
@@ -35,21 +35,22 @@ public class JshCaller implements CommandCaller {
         InputStream call_input = input;
         OutputStream call_output = output;
         ArrayList<String> arguments = new ArrayList<>();
-        for(Sub_Call sub_call : tokens){
-            switch (sub_call.getType()){
-                case("Substitution"):
-                case("BaseCall"):
+        for (Sub_Call sub_call : tokens) {
+            switch (sub_call.getType()) {
+                case ("Substitution"):
+                case ("BaseCall"):
                     arguments.addAll(sub_call.get_OutputArray());
                     break;
-                case("OutputRedirection"):
+                case ("OutputRedirection"):
                     call_output = sub_call.getOutput();
                     break;
-                case("InputRedirection"):
+                case ("InputRedirection"):
                     call_input = sub_call.getInput();
                     break;
             }
         }
-        AppMaker.getInstance().makeApp(arguments.get(0)).exec(new ArrayList<>(arguments.subList(1, arguments.size())), call_input, call_output);
+        AppExecutor.getInstance().executeApp(arguments.get(0), new ArrayList<>(arguments.subList(1, arguments.size())),
+                call_input, call_output);
     }
 
 }
