@@ -1,13 +1,12 @@
 package uk.ac.ucl.jsh.call_parts;
 
 import uk.ac.ucl.jsh.toolkit.InputReader;
-import uk.ac.ucl.jsh.toolkit.JshException;
 
 import java.io.*;
 import java.util.ArrayList;
 
 public class OutputRedirection implements Sub_Call{
-    private ArrayList<String> arguments;
+    private final ArrayList<String> arguments;
     public OutputStream output;
 
     public OutputRedirection(ArrayList<Sub_Call> argus) {
@@ -48,7 +47,7 @@ public class OutputRedirection implements Sub_Call{
     }
 
     @Override
-    public ArrayList<String> get_OutputArray() throws JshException {
+    public ArrayList<String> get_OutputArray()  {
         return null;
     }
 

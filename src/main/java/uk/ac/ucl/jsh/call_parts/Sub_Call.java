@@ -9,14 +9,14 @@ import java.util.ArrayList;
 
 public interface Sub_Call {
 
-    public String getString();
+    String getString();
 
-    public String getType();
+    String getType();
 
-    public OutputStream getOutput();
+    OutputStream getOutput();
 
-    public InputStream  getInput();
+    InputStream  getInput();
 
-    public ArrayList<String> get_OutputArray() throws JshException;
+    ArrayList<String> get_OutputArray() throws JshException;
 
 }

@@ -1,13 +1,10 @@
 package uk.ac.ucl.jsh.call_parts;
 
 import uk.ac.ucl.jsh.toolkit.Globbing;
-import uk.ac.ucl.jsh.toolkit.JshException;
 
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class BaseCall implements Sub_Call{
     private final String call;

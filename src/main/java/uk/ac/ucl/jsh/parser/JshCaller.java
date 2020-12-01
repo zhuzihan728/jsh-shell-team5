@@ -1,17 +1,14 @@
 package uk.ac.ucl.jsh.parser;
 
-import uk.ac.ucl.jsh.parser.CommandCaller;
 import uk.ac.ucl.jsh.call_parts.Sub_Call;
 import uk.ac.ucl.jsh.command.Call;
 import uk.ac.ucl.jsh.command.Pipe;
 import uk.ac.ucl.jsh.command.Sequence;
-import uk.ac.ucl.jsh.parser.CmdLineParser;
 import uk.ac.ucl.jsh.toolkit.AppExecutor;
 import uk.ac.ucl.jsh.toolkit.JshException;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class JshCaller implements CommandCaller {
 
@@ -31,7 +28,7 @@ public class JshCaller implements CommandCaller {
 
     @Override
     public void call(Call call, InputStream input, OutputStream output) throws JshException {
-        ArrayList<Sub_Call> tokens = CmdLineParser.getTokens(call.getString());
+        ArrayList<Sub_Call> tokens = new CmdLineParser(call.getString()).getTokens();
         InputStream call_input = input;
         OutputStream call_output = output;
         ArrayList<String> arguments = new ArrayList<>();

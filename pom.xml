@@ -31,7 +31,7 @@
     <maven.compiler.target>11</maven.compiler.target>
     <argLine>-XX:MaxPermSize=512m</argLine>
     <antlr4.visitor>true</antlr4.visitor>
-    <antlr4.listener>false</antlr4.listener>
+    <antlr4.listener>true</antlr4.listener>
   </properties>
   <build>
     <plugins>

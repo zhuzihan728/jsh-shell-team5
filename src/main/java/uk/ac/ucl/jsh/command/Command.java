@@ -7,5 +7,5 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public interface Command {
-    public void eval(JshCaller cmdline, InputStream input, OutputStream output) throws JshException;
+    void eval(JshCaller cmdline, InputStream input, OutputStream output) throws JshException;
 }
