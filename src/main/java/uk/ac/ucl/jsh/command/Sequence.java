@@ -7,8 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Sequence implements Command {
-    private Command first;
-    private Command second;
+    private final Command first;
+    private final Command second;
     public Sequence(Command first, Command second){
         this.first = first;
         this.second = second;

@@ -13,7 +13,6 @@ import java.util.Scanner;
 public class JshMain {
     public static void runJsh(String cmdLine, OutputStream output) {
         CmdLineParser parser = new CmdLineParser(cmdLine);
-        parser.parse();
         Command cmdline = parser.getCmdLine();
         try {
             cmdline.eval(new JshCaller(), System.in, output);
@@ -37,23 +36,20 @@ public class JshMain {
                 System.out.println("jsh: " + e.getMessage());
             }
         } else {
-            Scanner input = new Scanner(System.in);
-            try {
+            try (Scanner input = new Scanner(System.in)) {
                 while (true) {
                     String prompt = WorkingDr.getInstance().getWD() + "> ";
                     System.out.print(prompt);
                     try {
                         String cmdline = input.nextLine();
                         runJsh(cmdline, System.out);
-                    } catch (NoSuchElementException e){
+                    } catch (NoSuchElementException e) {
                         System.err.println(e.getMessage());
                         break;
                     } catch (Exception e) {
                         System.err.println("jsh: " + e.getMessage());
                     }
                 }
-            } finally {
-                input.close();
             }
         }
     }

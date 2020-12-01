@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Call implements Command {
-    private String call;
+    private final String call;
 
     public Call(String call) {
         this.call = call;

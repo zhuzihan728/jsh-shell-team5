@@ -2,15 +2,11 @@ package uk.ac.ucl.jsh.parser;
 
 import uk.ac.ucl.jsh.JshGrammarBaseVisitor;
 import uk.ac.ucl.jsh.JshGrammarParser;
-import uk.ac.ucl.jsh.JshMain;
 import uk.ac.ucl.jsh.command.Call;
 import uk.ac.ucl.jsh.command.Command;
 import uk.ac.ucl.jsh.command.Pipe;
 import uk.ac.ucl.jsh.command.Sequence;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
 
 public class CommandVisitor extends JshGrammarBaseVisitor<Command> {
     @Override

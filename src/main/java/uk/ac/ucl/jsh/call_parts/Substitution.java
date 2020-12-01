@@ -3,16 +3,14 @@ package uk.ac.ucl.jsh.call_parts;
 import uk.ac.ucl.jsh.JshMain;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Substitution implements Sub_Call{
     private final String substitution_string;
-    private OutputStream substition_output;
+    private OutputStream substitution_output;
 
     public Substitution(String substitution){
         this.substitution_string = substitution.substring(1,substitution.length()-1);
@@ -20,17 +18,17 @@ public class Substitution implements Sub_Call{
     }
 
     private void get_output() {
-        substition_output = new ByteArrayOutputStream();
-        JshMain.runJsh(substitution_string, substition_output);
+        substitution_output = new ByteArrayOutputStream();
+        JshMain.runJsh(substitution_string, substitution_output);
     }
 
     public OutputStream compute(){
-        return substition_output;
+        return substitution_output;
     }
 
     @Override
     public String getString() {
-        return substition_output.toString().trim();
+        return substitution_output.toString().trim();
     }
 
     @Override
@@ -40,7 +38,7 @@ public class Substitution implements Sub_Call{
 
     @Override
     public OutputStream getOutput() {
-        return substition_output;
+        return substitution_output;
     }
 
     @Override
@@ -50,6 +48,6 @@ public class Substitution implements Sub_Call{
 
     @Override
     public ArrayList<String> get_OutputArray() {
-        return new ArrayList<>(Arrays.asList(substition_output.toString().trim().split(System.getProperty("line.separator"))));
+        return new ArrayList<>(Arrays.asList(substitution_output.toString().trim().split(System.getProperty("line.separator"))));
     }
 }

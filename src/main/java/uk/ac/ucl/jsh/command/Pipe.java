@@ -7,8 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class Pipe implements Command {
-    private Command left;
-    private Command right;
+    private final Command left;
+    private final Command right;
     public Pipe(Command left, Command right){
         this.left = left;
         this.right = right;
