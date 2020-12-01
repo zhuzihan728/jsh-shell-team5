@@ -23,15 +23,13 @@ public class Ls implements Application {
     private File currDir;
 
     /**
-     * a method which checks whether the arguments for the application is legal and
-     * the input stream is not null if it is used for reading input
+     * a method which checks whether the arguments for the application is legal
      * 
      * @param appArgs The arguments for the application
-     * @param input   The stream where the application reads the input
      * @throws JshException The custom exception that Jsh shell throws if an error
      *                      occurs
      */
-    private void checkArguments(ArrayList<String> appArgs, InputStream input) throws JshException {
+    private void checkArguments(ArrayList<String> appArgs) throws JshException {
         if (appArgs.isEmpty()) {
             currDir = new File(WorkingDr.getInstance().getWD());
         } else if (appArgs.size() == 1) {
@@ -56,7 +54,7 @@ public class Ls implements Application {
      */
     @Override
     public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
-        checkArguments(appArgs, input);
+        checkArguments(appArgs);
         OutputStreamWriter writer = new OutputStreamWriter(output);
         try {
             File[] listOfFiles = currDir.listFiles();

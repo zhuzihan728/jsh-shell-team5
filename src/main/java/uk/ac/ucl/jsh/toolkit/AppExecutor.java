@@ -8,8 +8,8 @@ import uk.ac.ucl.jsh.applications.*;
 
 /**
  * The class AppExecutor follows the singleton pattern, it receives the name of
- * requested application from the parsed command line and creates and executes the
- * corresponding safe or unsafe application
+ * requested application from the parsed command line and creates and executes
+ * the corresponding safe or unsafe application
  */
 public class AppExecutor {
 
@@ -49,11 +49,7 @@ public class AppExecutor {
             appName = appName.replaceFirst("_", "");
         }
         Application app = appFactory.getApplication(appName);
-        if (appIsUnsafe) {
-            return new Unsafe(app);
-        } else {
-            return app;
-        }
+        return appIsUnsafe ? new Unsafe(app) : app;
     }
 
     /**

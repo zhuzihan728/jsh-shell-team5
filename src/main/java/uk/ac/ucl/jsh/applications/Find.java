@@ -29,15 +29,13 @@ public class Find implements Application {
     private String pattern;
 
     /**
-     * a method which checks whether the arguments for the application is legal and
-     * the input stream is not null if it is used for reading input
+     * a method which checks whether the arguments for the application is legal
      * 
      * @param appArgs The arguments for the application
-     * @param input   The stream where the application reads the input
      * @throws JshException The custom exception that Jsh shell throws if an error
      *                      occurs
      */
-    private void checkArguments(ArrayList<String> appArgs, InputStream input) throws JshException {
+    private void checkArguments(ArrayList<String> appArgs) throws JshException {
         if (appArgs.size() < 2) {
             throw new JshException("find: missing arguments");
         } else if (appArgs.size() == 2) {
@@ -68,7 +66,7 @@ public class Find implements Application {
      */
     @Override
     public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
-        checkArguments(appArgs, input);
+        checkArguments(appArgs);
         OutputStreamWriter writer = new OutputStreamWriter(output);
         File file = new File(WorkingDr.getInstance().getWD(), path);
         try {
@@ -110,14 +108,11 @@ public class Find implements Application {
                 writer.flush();
                 printed1 = true;
             }
-            if (a.isDirectory()) {
-                if (getFiles(a, pattern, writer)) {
-                    printed2 = true;
-                }
-
+            if (a.isDirectory() && getFiles(a, pattern, writer)) {
+                printed2 = true;
             }
         }
-        return (printed1 || printed2);
+        return printed1 || printed2;
     }
 
     /**

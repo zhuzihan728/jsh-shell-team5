@@ -1,19 +1,18 @@
 package uk.ac.ucl.jsh.applications;
 
 import java.util.Map;
+import java.util.HashMap;
 
 import uk.ac.ucl.jsh.toolkit.JshException;
 
-import java.util.HashMap;
-import java.lang.String;
-
 /**
- *  The class Application follows the factory pattern, in charge of creating concrete applications.
+ * The class Application follows the factory pattern, in charge of creating
+ * concrete applications.
  */
 public class AppFactory {
     /**
-     * The reference to the Map which maps the application names to the application objects
-     * objects.
+     * The reference to the Map which maps the application names to the application
+     * objects objects.
      */
     private final Map<String, Application> appMap;
 
@@ -43,7 +42,8 @@ public class AppFactory {
      * 
      * @param appType The string that specifies the application to be created
      * @return application The application requested
-     * @throws JshException The custom exception that Jsh shell throws if an error occurs
+     * @throws JshException The custom exception that Jsh shell throws if an error
+     *                      occurs
      */
     public Application getApplication(String appType) throws JshException {
         Application app;

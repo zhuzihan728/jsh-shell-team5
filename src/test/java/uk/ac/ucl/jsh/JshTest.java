@@ -21,25 +21,4 @@ public class JshTest {
         assertEquals(scn.next(),"foo");
     }
 
-    @Test
-    public void testEcho() throws Exception {
-        PipedInputStream in = new PipedInputStream();
-        PipedOutputStream out;
-        out = new PipedOutputStream(in);
-        //freestyle Echo
-        JshMain.runJsh("echo foo", out);
-        Scanner scn = new Scanner(in);
-        assertEquals(scn.next(),"foo");
-        //with double quotes 
-        JshMain.runJsh("echo \"foo\"", out);
-        assertEquals(scn.next(),"foo");
-        //null
-        JshMain.runJsh("echo ", out);
-        assertEquals(scn.next(),null);
-        //emty string
-        JshMain.runJsh("echo \"\"", out);
-        assertEquals(scn.next(),"");
-        //
-    } 
-
 }

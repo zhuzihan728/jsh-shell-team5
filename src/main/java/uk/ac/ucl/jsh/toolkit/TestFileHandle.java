@@ -27,7 +27,7 @@ public class TestFileHandle {
         /**
      * Utility function used to create a File Hierarchy that is used by the Test classes
      * 
-     * @throws IOException Exception being thrown if the File hierearchy fails to create
+     * @throws IOException Exception being thrown if the File hierarchy fails to create
      */
     public void createTestFileHierarchy(String path, String fileName) throws IOException {
         // Create two utilities Strings

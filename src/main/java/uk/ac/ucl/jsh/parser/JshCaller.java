@@ -34,14 +34,14 @@ public class JshCaller implements CommandCaller {
         ArrayList<String> arguments = new ArrayList<>();
         for (Sub_Call sub_call : tokens) {
             switch (sub_call.getType()) {
-                case ("Substitution"):
-                case ("BaseCall"):
+                case "Substitution":
+                case "BaseCall":
                     arguments.addAll(sub_call.get_OutputArray());
                     break;
-                case ("OutputRedirection"):
+                case "OutputRedirection":
                     call_output = sub_call.getOutput();
                     break;
-                case ("InputRedirection"):
+                case "InputRedirection":
                     call_input = sub_call.getInput();
                     break;
             }
