@@ -51,7 +51,7 @@ public class EchoTest {
         appArgs.clear();
         out.reset();
         ECHO.exec(appArgs, null, out);
-        assertEquals("", out.toString());
+        assertEquals("", out.toString().trim());
     }
 
     @AfterClass
