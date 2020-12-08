@@ -19,12 +19,14 @@ public class BaseCall implements Sub_Call{
 
     private void check_String(){
         globbed_results = new ArrayList<>();
-        if (this.type == 2) {
-            this.globbed_results.add(call.substring(1, call.length() - 1));
-        }else if(call.contains("*")) {
+        if (this.type == 1 && call.contains("*")){
             Globbing globbing = new Globbing(call);
             this.globbed_results = globbing.getGlobbed_results();
-        }else{
+        }
+        else if (this.type == 2) {
+            this.globbed_results.add(call.substring(1, call.length() - 1));     
+        }
+        else{
             this.globbed_results.add(call);
         }
     }

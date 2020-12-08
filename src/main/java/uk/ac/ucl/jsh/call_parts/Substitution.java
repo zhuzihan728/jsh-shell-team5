@@ -28,7 +28,7 @@ public class Substitution implements Sub_Call{
 
     @Override
     public String getString() {
-        return substitution_output.toString().trim();
+        return substitution_output.toString().replace(System.getProperty("line.separator"),"");
     }
 
     @Override
@@ -48,6 +48,6 @@ public class Substitution implements Sub_Call{
 
     @Override
     public ArrayList<String> get_OutputArray() {
-        return new ArrayList<>(Arrays.asList(substitution_output.toString().trim().split(System.getProperty("line.separator"))));
+        return new ArrayList<>(Arrays.asList(substitution_output.toString().split(System.getProperty("line.separator"))));
     }
 }

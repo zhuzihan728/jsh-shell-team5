@@ -74,10 +74,8 @@ public class Cat implements Application {
      *                     stream
      */
     private void writeToShell(Scanner in, OutputStreamWriter writer) throws IOException {
-        String line;
         while (in.hasNextLine()) {
-            line = in.nextLine();
-            writer.write(String.valueOf(line));
+            writer.write(String.valueOf(in.nextLine()));
             writer.write(System.getProperty("line.separator"));
             writer.flush();
         }
