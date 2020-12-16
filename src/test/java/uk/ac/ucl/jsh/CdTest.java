@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
 
@@ -18,19 +19,20 @@ import uk.ac.ucl.jsh.toolkit.TestFileHandle;
 import uk.ac.ucl.jsh.toolkit.WorkingDr;
 
 public class CdTest {
-    private static ArrayList<String> appArgs = new ArrayList<>();
+    private static ArrayList<String> appArgs;
     private static WorkingDr workingDir;
+    private static String dirPath;
     private static String initWorkingDir;
-    private static String dirPath = "/Users/coco/tmp"; //change when needed
     private static final Cd CD = new Cd();
     private static ByteArrayOutputStream out;
 
     @BeforeClass
     public static void SetTest() {
+        appArgs = new ArrayList<>();
         out = new ByteArrayOutputStream();
         workingDir = WorkingDr.getInstance();
+        dirPath = workingDir.getWD();
         initWorkingDir = workingDir.getWD();
-        workingDir.setWD(dirPath);
     }
 
     @Before
@@ -39,9 +41,18 @@ public class CdTest {
         testFileHandle.createTestFileHierarchy(dirPath + "/Other/a/b/c", "test.out");
     }
 
+    @After
+    // Delete the test hierarchy, reset the command arguments and reset the outputstream
+    public void afterTest() throws IOException {
+        appArgs.clear();
+        File path = new File(dirPath +"/Other");
+        TestFileHandle testFileHandle = new TestFileHandle();
+        testFileHandle.deleteFileHierarchy(path);
+        workingDir.setWD(initWorkingDir);
+    }   
+
     @Test
     public void testPath() throws Exception {
-        workingDir.setWD(dirPath + "Other/a/b/c");
         appArgs.add("..");
         CD.exec(appArgs, System.in, out);
         assertEquals(dirPath + "Other/a/b", workingDir.getWD());
@@ -49,7 +60,6 @@ public class CdTest {
 
     @Test
     public void testMissingArgs() throws Exception {
-        appArgs.clear();
         out.reset();
         try {
             CD.exec(appArgs, System.in, out);
