@@ -47,7 +47,7 @@ public class LsTest {
         workingDir.setWD(dirPath + "/Other");
         appArgs.add("..");
         LS.exec(appArgs, System.in, out);
-        String expectedOutput = "Other" + "\t" + "Test" + "\t" + "Documents" +"test4.txt" + System.getProperty("line.Separator");
+        String expectedOutput = "Other" + "\t" + "Test" + "\t" + "Documents" + "\t" + "test4.txt" + System.getProperty("line.separator");
         assertEquals(expectedOutput, out.toString());
     }
 
