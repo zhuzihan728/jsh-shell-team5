@@ -10,8 +10,14 @@ import uk.ac.ucl.jsh.toolkit.JshException;
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * Concrete acceptor class that evaluate the Commands.
+ */
 public class JshCaller implements CommandCaller {
 
+    /**
+     * Function that execute when it comes to a pipe command.
+     */
     @Override
     public void call(Pipe pipe, InputStream inputStream, OutputStream output) throws JshException {
         ByteArrayOutputStream firstOutputStream = new ByteArrayOutputStream();
@@ -20,12 +26,18 @@ public class JshCaller implements CommandCaller {
         pipe.getRight().eval(this, secondInputStream, output);
     }
 
+    /**
+     * Function that execute when it comes to a sequence command.
+     */
     @Override
     public void call(Sequence sequence, InputStream inputStream, OutputStream output) throws JshException {
         sequence.getFirst().eval(this, inputStream, output);
         sequence.getSecond().eval(this, inputStream, output);
     }
 
+    /**
+     * Function that execute when it comes to a call command.
+     */
     @Override
     public void call(Call call, InputStream input, OutputStream output) throws JshException {
         ArrayList<Sub_Call> tokens = new CmdLineParser(call.getString()).getTokens();

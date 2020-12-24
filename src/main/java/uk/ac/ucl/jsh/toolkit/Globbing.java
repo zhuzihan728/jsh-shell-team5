@@ -44,6 +44,9 @@ public class Globbing {
         get_globbed();
     }
 
+    /**
+     * Get the globbed filename arguments from the file system using the patterns.
+     */
     private void get_globbed(){
         globbingResult = new ArrayList<>();
         DirectoryStream<Path> stream;
@@ -64,6 +67,10 @@ public class Globbing {
         }
     }
 
+    /**
+     * Public function that allow other part of the code to get the result.
+     * @return ArrayList of globbed filenames.
+     */
     public ArrayList<String> getGlobbed_results() {
         return globbingResult;
     }
