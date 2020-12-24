@@ -13,15 +13,26 @@ import uk.ac.ucl.jsh.toolkit.ParserErrorHandling;
 
 import java.util.ArrayList;
 
+/**
+ * Parser class that turns the raw input command into a class type that
+ * defined in JSH.
+ */
 public class CmdLineParser{
     private final String cmdLine;
     private Command command;
     private ArrayList<Sub_Call> tokens;
 
+    /**
+     * 
+     * @param cmdLine Raw input command line from the user.
+     */
     public CmdLineParser(String cmdLine){
         this.cmdLine = cmdLine;
     }
 
+    /**
+     * Parse the raw input command line into a Command defined in JSH.
+     */
     private void parseCmdLine(){
         CharStream parserInput = CharStreams.fromString(cmdLine);
         JshGrammarLexer lexer = new JshGrammarLexer(parserInput);
@@ -35,11 +46,19 @@ public class CmdLineParser{
         command = new CommandVisitor().visitCmdline(parseTree);
     }
 
+    /**
+     * Function allows other part of the code to get the parsed command.
+     * 
+     * @return Command defined in the command interface.
+     */
     public Command getCmdLine(){
         parseCmdLine();
         return command;
     }
 
+    /**
+     * Parse the token of type Call into a list of arguments.
+     */
     private void parseTokens(){
         CharStream parserInput = CharStreams.fromString(cmdLine);
         CallGrammarLexer lexer = new CallGrammarLexer(parserInput);
@@ -53,6 +72,10 @@ public class CmdLineParser{
         this.tokens =  new CallVisitor().visitCall(parseTree);
     }
 
+    /**
+     * Function allows other part of the code to get the list of parsed tokens.
+     * @return Arraylist of arguments of type Sub_Call.
+     */
     public ArrayList<Sub_Call> getTokens(){
         parseTokens();
         return this.tokens;

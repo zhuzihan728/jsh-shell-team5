@@ -39,6 +39,18 @@ public class CdTest {
         testFileHandle.createTestFileHierarchy(dirPath + "/Other/a/b/c", "test.out");
     }
 
+    @After
+    // Delete the test hierarchy, reset the command arguments and reset the
+    // outputstream
+    public void afterTest() throws IOException {
+        out.reset();
+        appArgs.clear();
+        File path = new File(dirPath + "/Other");
+        TestFileHandle testFileHandle = new TestFileHandle();
+        testFileHandle.deleteFileHierarchy(path);
+        workingDir.setWD(dirPath);
+    }
+
     @Test
     public void testPath() throws Exception {
         workingDir.setWD(dirPath + "/Other/a/b/c");
@@ -75,7 +87,8 @@ public class CdTest {
                                                                                   // be find
             CD.exec(appArgs, System.in, out);
         } catch (Exception e) {
-            String dirExpectMessage = "cd: " + "random" + System.getProperty("file.separator") + "Path"+ "is not an existing directory";
+            String dirExpectMessage = "cd: " + "random" + System.getProperty("file.separator") + "Path"
+                    + "is not an existing directory";
             if (null != e.getMessage()) {
                 assertTrue(dirExpectMessage, e.getMessage().contains("is not an existing directory"));
             }
@@ -148,7 +161,7 @@ public class CdTest {
     }
 
     @Test
-    public void testNull() throws Exception {
+    public void testGlobbing() throws Exception {
         try {
             appArgs.add("");
             CD.exec(appArgs, System.in, out);
@@ -157,24 +170,14 @@ public class CdTest {
             assertEquals("cd: too many arguments", e.getMessage());
         }
     }
-//    @Test
-//     public void testGlobbing() throws Exception {
-//         appArgs.add("O*r");
-//         workingDir.setWD(System.getProperty("file.separator"));
-//         CD.exec(appArgs, System.in, out);
-//         assertEquals(dirPath + System.getProperty("file.separator") + "Other",workingDir.getWD());
-//     } 
 
-    @After
-    // Delete the test hierarchy, reset the command arguments and reset the outputstream
-    public void afterTest() throws IOException {
-        out.reset();
-        appArgs.clear();
-        File path = new File(dirPath + "/Other");
-        TestFileHandle testFileHandle = new TestFileHandle();
-        testFileHandle.deleteFileHierarchy(path);
-        workingDir.setWD(dirPath);
-    }
+    // @Test
+    // public void testGlobbing() throws Exception {
+    // appArgs.add("O*r");
+    // workingDir.setWD(System.getProperty("file.separator"));
+    // CD.exec(appArgs, System.in, out);
+    // assertEquals(dirPath + System.getProperty("file.separator") + "Other",workingDir.getWD());
+    // }
 
     @AfterClass
     public static void EndTest() throws IOException {

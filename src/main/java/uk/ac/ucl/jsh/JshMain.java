@@ -10,7 +10,15 @@ import java.io.OutputStream;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * Main class for running the JSH terminal.
+ */
 public class JshMain {
+    /**
+     * Function that executes the input line and write to output.
+     * @param cmdLine Raw input from the command.
+     * @param output Output Stream that the JSH should write to.
+     */
     public static void runJsh(String cmdLine, OutputStream output) {
         CmdLineParser parser = new CmdLineParser(cmdLine);
         Command cmdline = parser.getCmdLine();
@@ -20,6 +28,11 @@ public class JshMain {
             System.err.println("jsh: " + e.getMessage());
         }
     }
+
+    /**
+     * Main class that calls the runJsh to operate under several conditions.
+     * It will keep working until exit.
+     */
 
     public static void main(String[] args) {
         if (args.length > 0) {
