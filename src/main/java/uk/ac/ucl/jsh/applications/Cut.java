@@ -19,7 +19,7 @@ public class Cut implements Application {
     /**
      * the reference to the name of the file to be used for cut
      */
-    private String cutArg = null;
+    private String cutArg;
     /**
      * the reference to the cutting option, which specifies which bytes to be
      * extracted from each line
@@ -70,6 +70,7 @@ public class Cut implements Application {
      */
     @Override
     public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
+        cutArg = null;
         checkArguments(appArgs, input);
         OutputStreamWriter writer = new OutputStreamWriter(output);
         if (cutArg == null) {
@@ -113,7 +114,10 @@ public class Cut implements Application {
                 if (a.startsWith("-")) {
                     to = Integer.parseInt(a.split("-")[1]);
                     if (to >= toInf && toInf != 0) {
-                        return out = null;
+                        out.clear();
+                        out.add(1);
+                        out.add(Integer.MAX_VALUE);
+                        return out;
                     }
                     for (int i = 1; i <= to; i++) {
                         cutLs.add(i);

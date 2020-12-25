@@ -25,7 +25,7 @@ public class Grep implements Application {
      * the reference to the boolean value which stores true if file to be grepped is
      * not provided and input should be read, false otherwise
      */
-    private Boolean read_input = false;
+    private Boolean read_input;
 
     /**
      * a method which checks whether the arguments for the application is legal and
@@ -60,6 +60,7 @@ public class Grep implements Application {
      */
     @Override
     public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
+        read_input = false;
         checkArguments(appArgs, input);
         OutputStreamWriter writer = new OutputStreamWriter(output);
         if (read_input) {

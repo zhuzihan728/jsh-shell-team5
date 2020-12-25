@@ -21,7 +21,7 @@ public class Find implements Application {
     /**
      * the reference to the path of the root directory to be searched
      */
-    private String path = "";
+    private String path;
 
     /**
      * the reference to the searching pattern
@@ -66,9 +66,13 @@ public class Find implements Application {
      */
     @Override
     public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
+        path = "";
         checkArguments(appArgs);
         OutputStreamWriter writer = new OutputStreamWriter(output);
         File file = new File(WorkingDr.getInstance().getWD(), path);
+        if(!file.isDirectory()){
+            throw new JshException("find: could not open " + path);
+        }
         try {
             boolean atLeastOnePrinted = getFiles(file, pattern, writer);
             if (atLeastOnePrinted) {

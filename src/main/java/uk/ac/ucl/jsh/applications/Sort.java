@@ -19,12 +19,12 @@ public class Sort implements Application {
     /**
      * the reference to the name of file to be sorted
      */
-    private String sortArg = null;
+    private String sortArg;
     /**
      * the reference to the boolean value which stores true if reverse sort is
      * required, false otherwise
      */
-    private Boolean reverse = false;
+    private Boolean reverse;
 
     /**
      * a method which checks whether the arguments for the application is legal and
@@ -70,6 +70,8 @@ public class Sort implements Application {
      */
     @Override
     public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
+        sortArg = null;
+        reverse = false;
         checkArguments(appArgs, input);
         OutputStreamWriter writer = new OutputStreamWriter(output);
         try {
