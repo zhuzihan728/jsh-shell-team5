@@ -42,6 +42,9 @@ public class InputReader {
      */
     public static Scanner file_reader(String file) throws IOException {
         Path filePath = Paths.get(WorkingDr.getInstance().getWD()).resolve(file);
+        if(Files.isDirectory(filePath)){
+            throw new NoSuchFileException(file + " is a directory");
+        }
         if (Files.exists(filePath)) {
             Charset encoding = StandardCharsets.UTF_8;
             Scanner reader = new Scanner(filePath, encoding);
