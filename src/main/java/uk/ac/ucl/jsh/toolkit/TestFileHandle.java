@@ -41,4 +41,19 @@ public class TestFileHandle {
      }
     crtDirectory.delete();   
     }
+
+    /**
+     * Utility function used to gernate the files with mulitple lines that are used for testing the applications
+     * 
+     * @param lines Number of lines of text to generate
+     * @return A string representing the whole content in the written file
+     */
+    public String generateLongFileText(int lines) {
+        String resultString = new String();
+        for (int i = 0; i < lines; ++i) {
+            resultString += "Line" + Integer.toString(i) + System.getProperty("line.separator");
+        }
+        return resultString;
+    }
+
 }
