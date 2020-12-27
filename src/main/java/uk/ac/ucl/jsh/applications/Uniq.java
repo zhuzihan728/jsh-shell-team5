@@ -19,12 +19,12 @@ public class Uniq implements Application {
     /**
      * the reference to the name of file to be examined
      */
-    private String uniqArg = null;
+    private String uniqArg;
     /**
      * the reference to the boolean value which holds true if ignoreCase is
      * required, false otherwise
      */
-    private Boolean ignoreCase = false;
+    private Boolean ignoreCase;
 
     /**
      * a method which checks whether the arguments for the application is legal and
@@ -69,6 +69,8 @@ public class Uniq implements Application {
      */
     @Override
     public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
+        uniqArg = null;
+        ignoreCase = false;
         checkArguments(appArgs, input);
         OutputStreamWriter writer = new OutputStreamWriter(output);
         try {

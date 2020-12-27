@@ -19,11 +19,11 @@ public class Head implements Application {
     /**
      * the reference to the number of lines required
      */
-    public Integer headLines = 10;
+    public Integer headLines;
     /**
      * the reference to the file to be headed
      */
-    public String headArg = null;
+    public String headArg;
 
     /**
      * a method which checks whether the arguments for the application is legal and
@@ -69,6 +69,8 @@ public class Head implements Application {
      */
     @Override
     public void exec(ArrayList<String> appArgs, InputStream input, OutputStream output) throws JshException {
+        headLines = 10;
+        headArg = null;
         checkArguments(appArgs, input);
         OutputStreamWriter writer = new OutputStreamWriter(output);
         try {
