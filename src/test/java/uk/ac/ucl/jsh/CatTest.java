@@ -1,26 +1,15 @@
 package uk.ac.ucl.jsh;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.BufferedWriter;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.After;
-import org.junit.AfterClass;
-
+import org.junit.*;
 import uk.ac.ucl.jsh.applications.Cat;
 import uk.ac.ucl.jsh.toolkit.TestFileHandle;
 import uk.ac.ucl.jsh.toolkit.WorkingDr;
+
+import java.io.*;
+import java.util.ArrayList;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class CatTest {
     private static ArrayList<String> appArgs;
@@ -37,8 +26,9 @@ public class CatTest {
         dirPath = workingDir.getWD() + "/tmp/Test";
     }
 
-    public static void cre(String path) {
-        File file = new File(path.substring(0, path.lastIndexOf("/")));
+    public static String cre(String path) {
+        int i = path.lastIndexOf("/");
+        File file = new File(i == -1 ? path : path.substring(0, i));
         if (!file.exists()) {
             file.mkdirs();
         }
@@ -52,6 +42,7 @@ public class CatTest {
                 throw new RuntimeException(e);
             }
         }
+        return path;
     }
 
     @Before
@@ -62,18 +53,15 @@ public class CatTest {
             testFileHandle.createTestFileHierarchy(dirPath + "/Other", "test3.txt");
         } catch (Exception e) {
         }
-        cre(dirPath + "/Documents/test1.txt");
-        BufferedWriter bw = new BufferedWriter(new FileWriter("test1.txt"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter(cre(dirPath + "/Documents/test1.txt")));
         bw.write("Hello World");
         bw.close();
 
-        cre(dirPath + "/Documents/test2.txt");
-        bw = new BufferedWriter(new FileWriter("test2.txt"));
+        bw = new BufferedWriter(new FileWriter(cre(dirPath + "/Documents/test2.txt")));
         bw.write("This is a test");
         bw.close();
 
-        cre(dirPath + "/Other/test3.txt");
-        bw = new BufferedWriter(new FileWriter("test3.txt"));
+        bw = new BufferedWriter(new FileWriter(cre(dirPath + "/Other/test3.txt")));
         bw.write("This is an other test");
         bw.close();
 
@@ -108,14 +96,14 @@ public class CatTest {
     @Test
     public void testDirectoryPath() throws Exception {
         try {
-            appArgs.add("Documents");
+            appArgs.add(cre(dirPath + System.getProperty("file.separator") + "Documents"));
             CAT.exec(appArgs, System.in, out);
         } catch (Exception e) {
             String dirExpectMessage = "cat: " + System.getProperty("file.separator") + "tmp"
                     + System.getProperty("file.separator") + "Test" + System.getProperty("file.separator") + "Documents"
                     + "(Is a directory)";
             if (null != e.getMessage()) {
-                assertTrue(dirExpectMessage, e.getMessage().contains("(Is a directory)"));
+                assertTrue(dirExpectMessage, e.getMessage().contains("is a directory"));
             }
         }
     }
@@ -136,21 +124,28 @@ public class CatTest {
 
     @Test
     public void testAbsoluteFilePath() throws Exception {
-        appArgs.add(dirPath + System.getProperty("file.separator") + "Documents");
+        appArgs.add(dirPath + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator")
+                + "test1.txt");
+        appArgs.add(dirPath + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator")
+                + "test2.txt");
         CAT.exec(appArgs, System.in, out);
         String expectedOutput = "Hello World" + System.getProperty("line.separator") + "This is a test"
-                + System.getProperty("line.separator") + System.getProperty("line.separator");
-        assertEquals(expectedOutput, expectedOutput.toString());
+                + System.getProperty("line.separator");
+        assertEquals(expectedOutput, out.toString());
     }
 
     @Test
     public void testMultipleFiles() throws Exception {
-        appArgs.add(dirPath + System.getProperty("file.separator") + "Documents");
-        appArgs.add(dirPath + System.getProperty("file.separator") + "Other");
+        appArgs.add(dirPath + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator")
+                + "test1.txt");
+        appArgs.add(dirPath + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator")
+                + "test2.txt");
+        appArgs.add(dirPath + System.getProperty("file.separator") + "Other" + System.getProperty("file.separator")
+                + "test3.txt");
         CAT.exec(appArgs, System.in, out);
         String expectedOutput = "Hello World" + System.getProperty("line.separator") + "This is a test"
-                + System.getProperty("line.separator" + System.getProperty("line.separator") + "This is an other test"
-                        + System.getProperty("line.separator") + System.getProperty("line.separator"));
+                + System.getProperty("line.separator") + System.getProperty("line.separator") + "This is an other test"
+                + System.getProperty("line.separator") + System.getProperty("line.separator");
         assertEquals(expectedOutput, expectedOutput.toString());
     }
 

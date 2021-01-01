@@ -100,10 +100,10 @@ public class TailTest {
         try {
             appArgs.add("-n");
             appArgs.add("-1");
-            appArgs.add(dirPath + System.getProperty("file.separator") + "Documents");
+            appArgs.add(dirPath + System.getProperty("file.separator") + "Documents"+ System.getProperty("file.separator") + "test4.txt");
             TAIL.exec(appArgs, null, out);
         } catch (Exception e) {
-            assertEquals("tail: illegal line count -- -1", e.getMessage());
+            assertEquals("tail: " + dirPath + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator") + "illegal line count -- -1", e.getMessage());
         }
     }
 
@@ -170,9 +170,7 @@ public class TailTest {
             appArgs.add(dirPath + System.getProperty("file.separator") + "Other");
             TAIL.exec(appArgs, null, out);
         } catch (Exception e) {
-            assertEquals(
-                    "tail: " + System.getProperty("file.separator") + "tmp" + System.getProperty("file.separator")
-                            + "Other" + System.getProperty("file.separator") + "Other (Is a directory)",
+            assertEquals("tail: " + dirPath + System.getProperty("file.separator") + "Other is a directory",
                     e.getMessage());
         }
     }

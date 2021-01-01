@@ -103,10 +103,11 @@ public class HeadTest {
         try {
             appArgs.add("-n");
             appArgs.add("-1");
-            appArgs.add(dirPath + System.getProperty("file.separator") + "Documents");
+            appArgs.add(dirPath + System.getProperty("file.separator") + "Documents"
+                    + System.getProperty("file.separator") + "test4.txt");
             HEAD.exec(appArgs, null, out);
         } catch (Exception e) {
-            assertEquals("head: illegal line count -- -1", e.getMessage());
+            assertEquals("head: " + dirPath + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator") + "illegal line count -- -1", e.getMessage());
         }
     }
 
@@ -174,8 +175,7 @@ public class HeadTest {
             HEAD.exec(appArgs, null, out);
         } catch (Exception e) {
             assertEquals(
-                    "head: " + System.getProperty("file.separator") + "tmp" + System.getProperty("file.separator")
-                            + "Other" + System.getProperty("file.separator") + "Other (Is a directory)",
+                    "head: " + dirPath + System.getProperty("file.separator") + "Other is a directory",
                     e.getMessage());
         }
     }
