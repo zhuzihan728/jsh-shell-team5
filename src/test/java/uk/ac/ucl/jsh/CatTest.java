@@ -17,13 +17,15 @@ public class CatTest {
     private static String dirPath;
     private static final Cat CAT = new Cat();
     private static ByteArrayOutputStream out;
+    private static String initWD;
 
     @BeforeClass
     public static void SetTest() {
         appArgs = new ArrayList<>();
         out = new ByteArrayOutputStream();
         workingDir = WorkingDr.getInstance();
-        dirPath = workingDir.getWD() + "/tmp/Test";
+        initWD = workingDir.getWD();
+        dirPath = initWD + "/tmp/Test";
     }
 
     public static String cre(String path) {
@@ -70,7 +72,7 @@ public class CatTest {
     @Test
     public void testMissingInput() throws Exception {
         try {
-            CAT.exec(appArgs, System.in, out);
+            CAT.exec(appArgs, null, out);
         } catch (Exception e) {
             assertEquals("cat: missing InputStream", e.getMessage());
         }
@@ -175,7 +177,10 @@ public class CatTest {
     @AfterClass
     public static void EndTest() throws IOException {
         out.close();
-        workingDir.setWD(dirPath);
+        workingDir.setWD(initWD);
+        File path = new File(initWD + "/tmp");
+        TestFileHandle testFileHandle = new TestFileHandle();
+        testFileHandle.deleteFileHierarchy(path);
     }
 
 }

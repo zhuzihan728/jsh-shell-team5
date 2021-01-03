@@ -25,13 +25,15 @@ public class HeadTest {
     private static String dirPath;
     private static final Head HEAD = new Head();
     private static ByteArrayOutputStream out;
+    private static String initWD;
 
     @BeforeClass
     public static void SetTest() {
         appArgs = new ArrayList<>();
         out = new ByteArrayOutputStream();
         workingDir = WorkingDr.getInstance();
-        dirPath = workingDir.getWD() + "/tmp/Test";
+        initWD = workingDir.getWD();
+        dirPath = initWD + "/tmp/Test";
     }
 
     @Before
@@ -243,7 +245,10 @@ public class HeadTest {
     @AfterClass
     public static void EndTest() throws IOException {
         out.close();
-        workingDir.setWD(dirPath);
+        workingDir.setWD(initWD);
+        File path = new File(initWD + "/tmp");
+        TestFileHandle testFileHandle = new TestFileHandle();
+        testFileHandle.deleteFileHierarchy(path);
     }
 
     // testGlobbedPathFile
