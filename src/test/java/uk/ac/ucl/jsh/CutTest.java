@@ -3,6 +3,7 @@ package uk.ac.ucl.jsh;
 import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileWriter;
@@ -27,6 +28,7 @@ public class CutTest {
     private static final Cut CUT = new Cut();
     private static ByteArrayOutputStream out;
     private static String initWD;
+    private static ByteArrayInputStream inputStream;
 
     @BeforeClass
     public static void SetTest() {
@@ -51,6 +53,8 @@ public class CutTest {
         BufferedWriter bw = new BufferedWriter(new FileWriter(dirPath + "/Documents/test4.txt"));
         bw.write(testFileHandle.generateLongFileText(30));
         bw.close();
+        inputStream = new ByteArrayInputStream("hello".getBytes());
+        System.setIn(inputStream);
     }
 
     @Test
@@ -118,6 +122,20 @@ public class CutTest {
             assertEquals("cut: missing arguments", e.getMessage());
         }
     }
+
+    @Test
+    public void testInvalidArgument1() {
+        try {
+            appArgs.add("one");
+            appArgs.add("one");
+            appArgs.add("one");
+            CUT.exec(appArgs, null, out);
+        } catch (Exception e) {
+            assertEquals("cut: wrong argument one", e.getMessage());
+        }
+    }
+
+    
 
     @Test
     public void testInvalidFilePath() {
@@ -207,6 +225,68 @@ public class CutTest {
     }
 
     @Test
+    public void testLine() throws Exception {
+        appArgs.add("-b");
+        appArgs.add("3-,5");
+        appArgs.add(dirPath + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator") + "test4.txt");
+        String expectedOutput = new String();
+        for (int i = 0; i < 30; ++i) {
+            expectedOutput += "ne" + Integer.toString(i) + System.getProperty("line.separator");
+        }
+        CUT.exec(appArgs, null, out);
+        assertEquals(expectedOutput, out.toString());
+    }
+
+    @Test
+    public void testAllLine() throws Exception {
+        appArgs.add("-b");
+        appArgs.add("2-,-5");
+        appArgs.add(dirPath + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator") + "test4.txt");
+        String expectedOutput = new String();
+        for (int i = 0; i < 30; ++i) {
+            expectedOutput += "Line" + Integer.toString(i) + System.getProperty("line.separator");
+        }
+        CUT.exec(appArgs, null, out);
+        assertEquals(expectedOutput, out.toString());
+    }
+
+    @Test
+    public void testLine1() throws Exception {
+        appArgs.add("-b");
+        appArgs.add("3-,5-");
+        appArgs.add(dirPath + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator") + "test4.txt");
+        String expectedOutput = new String();
+        for (int i = 0; i < 30; ++i) {
+            expectedOutput += "ne" + Integer.toString(i) + System.getProperty("line.separator");
+        }
+        CUT.exec(appArgs, null, out);
+        assertEquals(expectedOutput, out.toString());
+    }
+
+    @Test
+    public void testLine2() throws Exception {
+        appArgs.add("-b");
+        appArgs.add("1-,2-4");
+        appArgs.add(dirPath + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator") + "test4.txt");
+        String expectedOutput = new String();
+        for (int i = 0; i < 30; ++i) {
+            expectedOutput += "Line" + Integer.toString(i) + System.getProperty("line.separator");
+        }
+        CUT.exec(appArgs, null, out);
+        assertEquals(expectedOutput, out.toString());
+    }
+
+    @Test
+    public void testNoLine() throws Exception {
+        appArgs.add("-b");
+        appArgs.add("10");
+        appArgs.add(dirPath + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator") + "test4.txt");
+        String expectedOutput = new String();
+        CUT.exec(appArgs, null, out);
+        assertEquals(expectedOutput, out.toString().trim());
+    }
+
+    @Test
     public void testDashNumber() throws Exception {
         appArgs.add("-b");
         appArgs.add("-3");
@@ -229,6 +309,28 @@ public class CutTest {
             expectedOutput += Integer.toString(i) + System.getProperty("line.separator");
         }
         CUT.exec(appArgs, null, out);
+        assertEquals(expectedOutput, out.toString());
+    } 
+
+    @Test
+    public void testWord() throws Exception {
+        appArgs.add("-b");
+        appArgs.add("3,3");
+        appArgs.add(dirPath + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator") + "test4.txt");
+        String expectedOutput = new String();
+        for (int i = 0; i < 30; ++i) {
+            expectedOutput += "n" +  System.getProperty("line.separator");
+        }
+        CUT.exec(appArgs, null, out);
+        assertEquals(expectedOutput, out.toString());
+    } 
+
+    @Test
+    public void testFile() throws Exception {
+        appArgs.add("-b");
+        appArgs.add("1,3-,2-,4-5,-3");
+        String expectedOutput = "hello" + System.getProperty("line.separator");
+        CUT.exec(appArgs, System.in, out);
         assertEquals(expectedOutput, out.toString());
     } 
 

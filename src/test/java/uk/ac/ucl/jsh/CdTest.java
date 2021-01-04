@@ -81,6 +81,19 @@ public class CdTest {
     }
 
     @Test
+    public void testNotDir() throws Exception {
+        workingDir.setWD(dirPath + "/Other/a/b/c");
+        appArgs.add("test.out");
+        try{
+            CD.exec(appArgs, System.in, out);
+        } catch (Exception e) {
+            assertEquals("cd: test.out is not an existing directory", e.getMessage());
+        }
+    }
+
+    
+
+    @Test
     public void testInvaildPath() throws Exception {
         try {
             appArgs.add("random" + System.getProperty("file.separator") + "Path");// find a random directory that can't

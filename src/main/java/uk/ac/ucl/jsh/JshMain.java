@@ -42,6 +42,7 @@ public class JshMain {
             }
             if (!args[0].equals("-c")) {
                 System.out.println("jsh: " + args[0] + ": unexpected argument");
+                return;
             }
             try {
                 runJsh(args[1], System.out);

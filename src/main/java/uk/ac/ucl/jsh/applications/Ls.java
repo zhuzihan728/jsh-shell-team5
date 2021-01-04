@@ -37,6 +37,9 @@ public class Ls implements Application {
             if (!currDir.exists()) {
                 throw new JshException("ls: " + appArgs.get(0) + " does not exist");
             }
+            if(!currDir.isDirectory()){
+                throw new JshException("ls: could not open " + appArgs.get(0));
+            }
         } else {
             throw new JshException("ls: too many arguments");
         }
