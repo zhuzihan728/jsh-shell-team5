@@ -19,4 +19,6 @@ public interface Command {
      * @throws JshException Exception could be thrown if there's any exception thrown by java at runtime.
      */
     void eval(JshCaller cmdline, InputStream input, OutputStream output) throws JshException;
+
+    String getString();
 }

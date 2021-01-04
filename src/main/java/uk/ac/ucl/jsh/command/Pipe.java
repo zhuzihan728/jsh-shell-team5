@@ -56,4 +56,9 @@ public class Pipe implements Command {
     public void eval(JshCaller caller, InputStream input, OutputStream output) throws JshException {
         caller.call(this,input,output);
     }
+
+    @Override
+    public String getString() {
+        return left.getString() + " PIPE " + right.getString();
+    }
 }

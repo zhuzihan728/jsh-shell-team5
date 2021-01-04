@@ -97,7 +97,11 @@ public class FindTest {
                 + System.getProperty("file.separator") + "tmp" + System.getProperty("file.separator") + "Test"
                 + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator")
                 + "test3.txt" + System.getProperty("line.separator") + System.getProperty("line.separator");
-        assertEquals(expectedOutput, out.toString());
+        ArrayList<String> a = new ArrayList(Arrays.asList(expectedOutput.split(System.getProperty("line.separator"))));
+        ArrayList<String> b = new ArrayList(Arrays.asList(out.toString().split(System.getProperty("line.separator"))));
+        Collections.sort(a);
+        Collections.sort(b);
+        assertEquals(a, b);
     }
 
     @Test
