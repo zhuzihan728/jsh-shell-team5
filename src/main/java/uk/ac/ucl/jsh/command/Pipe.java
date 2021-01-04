@@ -57,6 +57,10 @@ public class Pipe implements Command {
         caller.call(this,input,output);
     }
 
+    /**
+     * Getter function for getting the content of the command.
+     * @return string
+     */
     @Override
     public String getString() {
         return left.getString() + " PIPE " + right.getString();

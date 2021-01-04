@@ -51,6 +51,10 @@ public class Sequence implements Command {
         cmdline.call(this,input,output);
     }
 
+    /**
+     * Getter function for getting the content of the command.
+     * @return string
+     */
     @Override
     public String getString() {
         return first.getString() + " SEQ " +second.getString();

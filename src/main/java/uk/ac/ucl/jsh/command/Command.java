@@ -20,5 +20,9 @@ public interface Command {
      */
     void eval(JshCaller cmdline, InputStream input, OutputStream output) throws JshException;
 
+    /**
+     * Getter function for getting the content of the command.
+     * @return string
+     */
     String getString();
 }
