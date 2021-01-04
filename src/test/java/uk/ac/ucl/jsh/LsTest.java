@@ -15,6 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import uk.ac.ucl.jsh.applications.Ls;
+import uk.ac.ucl.jsh.toolkit.JshException;
 import uk.ac.ucl.jsh.toolkit.TestFileHandle;
 import uk.ac.ucl.jsh.toolkit.WorkingDr;
 
@@ -94,8 +95,7 @@ public class LsTest {
 
     @Test
     public void testDotsPath() throws Exception {
-        workingDir.setWD(
-                cre(dirPath + System.getProperty("file.separator") + "tmp" + System.getProperty("file.separator")));
+        workingDir.setWD(cre(dirPath + System.getProperty("file.separator") + "tmp"));
         appArgs.add("..");
         LS.exec(appArgs, System.in, out);
         String expectedOutput = "test7.txt" + "\t" + "Other" + "\t" + "Try" + "\t" + "Documents" + "\t" + "tmp" + "\t"
@@ -115,8 +115,7 @@ public class LsTest {
     @Test
     public void testCurrentDirectory() throws Exception {
         // working Directory under Try
-        workingDir.setWD(
-                cre(dirPath + System.getProperty("file.separator") + System.getProperty("file.separator") + "Try"));
+        workingDir.setWD(cre(dirPath + System.getProperty("file.separator") + "Try"));
         // appArgs.add("");
         LS.exec(appArgs, System.in, out);
         String expectedOutput = "test3.txt" + "\t" + "d" + "\t" + "e" + "\t" + System.getProperty("line.separator");
@@ -186,6 +185,50 @@ public class LsTest {
         Collections.sort(x);
         Collections.sort(y);
         assertEquals(x, y);
+    }
+
+    @Test
+    public void testTooManyArg() throws Exception {
+        appArgs.add("one");
+        appArgs.add("two");
+        try {
+            LS.exec(appArgs, System.in, out);
+        } catch (JshException e) {
+            assertEquals("ls: too many arguments", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testWrongArg() throws Exception {
+        appArgs.add("sbhasbdk");
+        try {
+            LS.exec(appArgs, System.in, out);
+        } catch (JshException e) {
+            assertEquals("ls: sbhasbdk does not exist", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNotDir() throws Exception {
+        workingDir.setWD(
+                cre(dirPath + System.getProperty("file.separator") + System.getProperty("file.separator") + "Try"));
+        appArgs.add("test3.txt");
+        try {
+            LS.exec(appArgs, System.in, out);
+        } catch (JshException e) {
+            assertEquals("ls: could not open test3.txt", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNoFile() throws Exception {
+        workingDir.setWD(cre(dirPath + System.getProperty("file.separator") + "Other"));
+        File path = new File(dirPath + "/Other/a");
+        TestFileHandle testFileHandle = new TestFileHandle();
+        testFileHandle.deleteFileHierarchy(path);
+        LS.exec(appArgs, System.in, out);
+        assertEquals("", out.toString());
+
     }
 
     @After
