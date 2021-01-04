@@ -50,4 +50,9 @@ public class Sequence implements Command {
     public void eval(JshCaller cmdline, InputStream input, OutputStream output) throws JshException {
         cmdline.call(this,input,output);
     }
+
+    @Override
+    public String getString() {
+        return first.getString() + " SEQ " +second.getString();
+    }
 }

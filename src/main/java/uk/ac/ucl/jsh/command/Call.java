@@ -36,6 +36,7 @@ public class Call implements Command {
      * Getter function for getting the content of the command.
      * @return
      */
+    @Override
     public String getString(){
         return call;
     }
