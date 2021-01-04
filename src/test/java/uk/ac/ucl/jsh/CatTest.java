@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 public class CatTest {
     private static ArrayList<String> appArgs;
@@ -84,14 +83,9 @@ public class CatTest {
             appArgs.add(dirPath + System.getProperty("file.separator") + "RandomPath");
             CAT.exec(appArgs, System.in, out);
         } catch (Exception e) {
-            e.printStackTrace();
-            String ExpectMessage = "cat: " + System.getProperty("file.separator") + "RandomPath"
-                    + "(No such file or directory)";
-            if (null != e.getMessage()) {
-                // assertTrue(ExpectMessage, e.getMessage().contains("(No such file or
-                // directory)"));
-                assertTrue(ExpectMessage, e.getMessage().contains("does not exist"));
-            }
+            String ExpectMessage = "cat: " + dirPath + System.getProperty("file.separator") + "RandomPath"
+                    + " does not exist";
+            assertEquals(ExpectMessage, e.getMessage());
         }
     }
 
@@ -101,12 +95,9 @@ public class CatTest {
             appArgs.add(cre(dirPath + System.getProperty("file.separator") + "Documents"));
             CAT.exec(appArgs, System.in, out);
         } catch (Exception e) {
-            String dirExpectMessage = "cat: " + System.getProperty("file.separator") + "tmp"
-                    + System.getProperty("file.separator") + "Test" + System.getProperty("file.separator") + "Documents"
-                    + "(Is a directory)";
-            if (null != e.getMessage()) {
-                assertTrue(dirExpectMessage, e.getMessage().contains("is a directory"));
-            }
+            String dirExpectMessage = "cat: " + dirPath + System.getProperty("file.separator") + "Documents"
+                    + " is a directory";
+            assertEquals(dirExpectMessage, e.getMessage());
         }
     }
 

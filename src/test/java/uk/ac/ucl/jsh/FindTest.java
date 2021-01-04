@@ -222,8 +222,10 @@ public class FindTest {
     public static void EndTest() throws IOException {
         out.close();
         workingDir.setWD(initWD);
-        File path = new File(initWD + "/tmp");
         TestFileHandle testFileHandle = new TestFileHandle();
+        File path = new File(initWD + "/tmp");
+        testFileHandle.deleteFileHierarchy(path);
+        path = new File(initWD + "/Documents");
         testFileHandle.deleteFileHierarchy(path);
     }
 }

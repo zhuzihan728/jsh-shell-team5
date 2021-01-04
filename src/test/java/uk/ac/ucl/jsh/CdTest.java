@@ -84,14 +84,12 @@ public class CdTest {
     public void testNotDir() throws Exception {
         workingDir.setWD(dirPath + "/Other/a/b/c");
         appArgs.add("test.out");
-        try{
+        try {
             CD.exec(appArgs, System.in, out);
         } catch (Exception e) {
             assertEquals("cd: test.out is not an existing directory", e.getMessage());
         }
     }
-
-    
 
     @Test
     public void testInvaildPath() throws Exception {
@@ -101,10 +99,8 @@ public class CdTest {
             CD.exec(appArgs, System.in, out);
         } catch (Exception e) {
             String dirExpectMessage = "cd: " + "random" + System.getProperty("file.separator") + "Path"
-                    + "is not an existing directory";
-            if (null != e.getMessage()) {
-                assertTrue(dirExpectMessage, e.getMessage().contains("is not an existing directory"));
-            }
+                    + " is not an existing directory";
+            assertEquals(dirExpectMessage, e.getMessage());
         }
     }
 
@@ -183,7 +179,6 @@ public class CdTest {
             assertEquals("cd: too many arguments", e.getMessage());
         }
     }
-
 
     @AfterClass
     public static void EndTest() throws IOException {

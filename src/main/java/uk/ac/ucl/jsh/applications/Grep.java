@@ -65,16 +65,17 @@ public class Grep implements Application {
         OutputStreamWriter writer = new OutputStreamWriter(output);
         if (read_input) {
             String line;
-            Scanner in = new Scanner(input);
-            while (in.hasNextLine()) {
-                line = in.nextLine();
-                if (PatternMatcher.findPattern(line, pattern)) {
-                    try {
-                        writer.write(line);
-                        writer.write(System.getProperty("line.separator"));
-                        writer.flush();
-                    } catch (IOException e) {
-                        throw new JshException("grep: " + e.getMessage());
+            try (Scanner in = new Scanner(input)) {
+                while (in.hasNextLine()) {
+                    line = in.nextLine();
+                    if (PatternMatcher.findPattern(line, pattern)) {
+                        try {
+                            writer.write(line);
+                            writer.write(System.getProperty("line.separator"));
+                            writer.flush();
+                        } catch (IOException e) {
+                            throw new JshException("grep: " + e.getMessage());
+                        }
                     }
                 }
             }
