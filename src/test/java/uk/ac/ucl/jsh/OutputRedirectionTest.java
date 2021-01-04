@@ -14,17 +14,17 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import uk.ac.ucl.jsh.call_parts.BaseCall;
-import uk.ac.ucl.jsh.call_parts.InputRedirection;
+import uk.ac.ucl.jsh.call_parts.OutputRedirection;
 import uk.ac.ucl.jsh.call_parts.Sub_Call;
 import uk.ac.ucl.jsh.toolkit.TestFileHandle;
 import uk.ac.ucl.jsh.toolkit.WorkingDr;
 
-public class InputRedirectionTest {
+public class OutputRedirectionTest {
     private static String dirPath;
     private static WorkingDr workingDir;
     private static String initWD;
     private static ArrayList<Sub_Call> arguments;
-    private static InputRedirection ir;
+    private static OutputRedirection or;
 
     @BeforeClass
     public static void SetTest() {
@@ -43,33 +43,33 @@ public class InputRedirectionTest {
         BaseCall b = new BaseCall("hello", 0);
         arguments.add(a);
         arguments.add(b);
-        ir = new InputRedirection(arguments);
+        or = new OutputRedirection(arguments);
     }
 
     @Test
     public void testGetString() throws Exception {
-        assertEquals(null, ir.getString());
+        assertEquals(null, or.getString());
     }
 
     @Test
     public void testGetType() throws Exception {
-        String a = "InputRedirection";
-        assertEquals(a, ir.getType());
+        String a = "OutputRedirection";
+        assertEquals(a, or.getType());
     }
 
     @Test
     public void testGetIn() throws Exception {
-        assertNotNull(ir.getInput());
+        assertEquals(null, or.getInput());
     }
 
     @Test
     public void testGetOut() throws Exception {
-        assertEquals(null, ir.getOutput());
+        assertNotNull(or.getOutput());
     }
 
     @Test
     public void testGetArray() throws Exception {
-        assertEquals(null, ir.get_OutputArray());
+        assertEquals(null, or.get_OutputArray());
     }
 
     @After

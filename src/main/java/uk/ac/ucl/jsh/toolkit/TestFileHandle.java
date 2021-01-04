@@ -21,7 +21,7 @@ public class TestFileHandle {
         String fileSeparator = System.getProperty("file.separator");
         // Check whether directory exists
         File file = new File(path);
-        if (!file.exists() || !file.isDirectory()) {
+        if (!file.isDirectory()) {
             file.mkdirs();
         }
         Files.createFile(Paths.get(path + fileSeparator + fileName));
