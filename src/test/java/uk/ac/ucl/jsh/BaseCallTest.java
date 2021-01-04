@@ -83,7 +83,7 @@ public class BaseCallTest {
         ArrayList<String> a = new ArrayList<>();
         a.add("test1.txt");
         a.add("test.txt");
-        ArrayList<String> b = new ArrayList(Arrays.asList(bc.getString().split(" ")));
+        ArrayList<String> b = new ArrayList<>(Arrays.asList(bc.getString().split(" ")));
         Collections.sort(a);
         Collections.sort(b);
         assertEquals(a, b);

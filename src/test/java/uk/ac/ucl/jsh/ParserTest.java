@@ -1,7 +1,6 @@
 package uk.ac.ucl.jsh;
 
 import org.junit.*;
-import uk.ac.ucl.jsh.call_parts.OutputRedirection;
 import uk.ac.ucl.jsh.call_parts.Sub_Call;
 import uk.ac.ucl.jsh.command.Call;
 import uk.ac.ucl.jsh.command.Command;
@@ -24,8 +23,6 @@ public class ParserTest {
     private static String dirPath;
     private static WorkingDr workingDir;
     private static String initWD;
-    private static ArrayList<Sub_Call> arguments;
-    private static OutputRedirection or;
 
     @BeforeClass
     public static void SetTest() {
@@ -60,7 +57,7 @@ public class ParserTest {
     @Test
     public void testUnquoted() throws JshException {
         String test_input = "a   bc  def";
-        ArrayList<String> expected_out = new ArrayList(Arrays.asList("a","bc","def"));
+        ArrayList<String> expected_out = new ArrayList<>(Arrays.asList("a","bc","def"));
         CmdLineParser parser = new CmdLineParser(test_input);
         ArrayList<Sub_Call> parser_out = parser.getTokens();
         assertEquals(expected_out, sub_call_to_string(parser_out));
@@ -69,7 +66,7 @@ public class ParserTest {
     @Test
     public void testSingleQuoted() throws JshException {
         String test_input = "echo a'a b c `echo def`' ";
-        ArrayList<String> expected_out = new ArrayList(Arrays.asList("echo","aa b c `echo def`"));
+        ArrayList<String> expected_out = new ArrayList<>(Arrays.asList("echo","aa b c `echo def`"));
         CmdLineParser parser = new CmdLineParser(test_input);
         ArrayList<Sub_Call> parser_out = parser.getTokens();
         assertEquals(expected_out, sub_call_to_string(parser_out));
@@ -78,7 +75,7 @@ public class ParserTest {
     @Test
     public void testDoubleQuoted() throws JshException {
         String test_input = "echo \"hi\" \"how `echo are`\"";
-        ArrayList<String> expected_out = new ArrayList(Arrays.asList("echo","hi","how are"));
+        ArrayList<String> expected_out = new ArrayList<>(Arrays.asList("echo","hi","how are"));
         CmdLineParser parser = new CmdLineParser(test_input);
         ArrayList<Sub_Call> parser_out = parser.getTokens();
         assertEquals(expected_out, sub_call_to_string(parser_out));
@@ -87,7 +84,7 @@ public class ParserTest {
     @Test
     public void mixedQuotedTest() throws JshException {
         String test_input = "echo a\"hi\"b c\"how `echo are`\"d";
-        ArrayList<String> expected_out = new ArrayList(Arrays.asList("echo","ahib","chow ared"));
+        ArrayList<String> expected_out = new ArrayList<>(Arrays.asList("echo","ahib","chow ared"));
         CmdLineParser parser = new CmdLineParser(test_input);
         ArrayList<Sub_Call> parser_out = parser.getTokens();
         assertEquals(expected_out, sub_call_to_string(parser_out));
@@ -96,7 +93,7 @@ public class ParserTest {
     @Test
     public void mixedQuotedTest2() throws JshException {
         String test_input = "echo a\"hi\"b \"how `echo are`\" cd ";
-        ArrayList<String> expected_out = new ArrayList(Arrays.asList("echo","ahib","how are", "cd"));
+        ArrayList<String> expected_out = new ArrayList<>(Arrays.asList("echo","ahib","how are", "cd"));
         CmdLineParser parser = new CmdLineParser(test_input);
         ArrayList<Sub_Call> parser_out = parser.getTokens();
         assertEquals(expected_out, sub_call_to_string(parser_out));
@@ -106,7 +103,7 @@ public class ParserTest {
     public void mixedQuotedTest3() throws JshException {
         String test_input = "echo a b c\"d\" e f g h ";
         ArrayList<String> expected_out =
-                new ArrayList(Arrays.asList("echo","a","b","cd", "e", "f","g","h"));
+                new ArrayList<>(Arrays.asList("echo","a","b","cd", "e", "f","g","h"));
         CmdLineParser parser = new CmdLineParser(test_input);
         ArrayList<Sub_Call> parser_out = parser.getTokens();
         assertEquals(expected_out, sub_call_to_string(parser_out));
@@ -115,7 +112,7 @@ public class ParserTest {
     @Test
     public void testBackQuoted() throws JshException {
         String test_input = "echo `echo hello` ";
-        ArrayList<String> expected_out = new ArrayList(Arrays.asList("echo","hello"));
+        ArrayList<String> expected_out = new ArrayList<>(Arrays.asList("echo","hello"));
         CmdLineParser parser = new CmdLineParser(test_input);
         ArrayList<Sub_Call> parser_out = parser.getTokens();
         assertEquals(expected_out, sub_call_to_string(parser_out));
@@ -124,7 +121,7 @@ public class ParserTest {
     @Test
     public void testRedirection1() throws JshException {
         String test_input = "a > b";
-        ArrayList<String> expected_out = new ArrayList(Arrays.asList("a"));
+        ArrayList<String> expected_out = new ArrayList<>(Arrays.asList("a"));
         CmdLineParser parser = new CmdLineParser(test_input);
         ArrayList<Sub_Call> parser_out = parser.getTokens();
         assertEquals(expected_out, sub_call_to_string(parser_out));
@@ -133,7 +130,7 @@ public class ParserTest {
     @Test
     public void testRedirection2() throws JshException {
         String test_input = "a < b";
-        ArrayList<String> expected_out = new ArrayList(Arrays.asList("a"));
+        ArrayList<String> expected_out = new ArrayList<>(Arrays.asList("a"));
         CmdLineParser parser = new CmdLineParser(test_input);
         ArrayList<Sub_Call> parser_out = parser.getTokens();
         assertEquals(expected_out, sub_call_to_string(parser_out));
@@ -142,7 +139,7 @@ public class ParserTest {
     @Test
     public void testRedirection3() throws JshException {
         String test_input = "a < b > c";
-        ArrayList<String> expected_out = new ArrayList(Arrays.asList("a"));
+        ArrayList<String> expected_out = new ArrayList<>(Arrays.asList("a"));
         CmdLineParser parser = new CmdLineParser(test_input);
         ArrayList<Sub_Call> parser_out = parser.getTokens();
         assertEquals(expected_out, sub_call_to_string(parser_out));
@@ -151,7 +148,7 @@ public class ParserTest {
     @Test
     public void testRedirection4() throws JshException {
         String test_input = "a > b > c";
-        ArrayList<String> expected_out = new ArrayList(Arrays.asList("a"));
+        ArrayList<String> expected_out = new ArrayList<>(Arrays.asList("a"));
         CmdLineParser parser = new CmdLineParser(test_input);
         ArrayList<Sub_Call> parser_out = parser.getTokens();
         assertEquals(expected_out, sub_call_to_string(parser_out));
