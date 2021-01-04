@@ -151,17 +151,6 @@ public class CatTest {
         assertEquals(expectedOutput, expectedOutput.toString());
     }
 
-    // @Test
-    // public void testGlobbingFiles() throws Exception {
-    // appArgs.add(dirPath + System.getProperty("file.separator") + "D*s");
-    // CAT.exec(appArgs, System.in, out);
-    // String expectedOutput = "Hello World" + System.getProperty("line.separator")
-    // + "This is a test"
-    // + System.getProperty("line.separator" + System.getProperty("line.separator")
-    // + "This is an other test");
-    // assertEquals(expectedOutput, expectedOutput.toString());
-    // }
-
     @After
     // Delete the test hierarchy, reset the command arguments and reset the
     // outputstream

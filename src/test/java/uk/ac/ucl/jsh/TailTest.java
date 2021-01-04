@@ -9,13 +9,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import org.junit.*;
 
-import org.junit.runners.MethodSorters;
 import uk.ac.ucl.jsh.applications.Tail;
 import uk.ac.ucl.jsh.toolkit.TestFileHandle;
 import uk.ac.ucl.jsh.toolkit.WorkingDr;

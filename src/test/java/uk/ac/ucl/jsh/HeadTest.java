@@ -250,7 +250,4 @@ public class HeadTest {
         TestFileHandle testFileHandle = new TestFileHandle();
         testFileHandle.deleteFileHierarchy(path);
     }
-
-    // testGlobbedPathFile
-
 }

@@ -199,11 +199,6 @@ public class FindTest {
     }
 
 
-
-    
-    // testFindFileFromAbsolutePath testFindFileFromLowerLeverInTree
-    // testFindFileFromGlobbedPath testGlobbedPathAndPattern
-
     @After
     // Delete the test hierarchy, reset the command arguments and reset the
     // outputstream

@@ -142,16 +142,7 @@ public class LsTest {
         assertEquals(expectedOutput, out.toString());
     }
 
-    // @Test
-    // public void testGlobbing() throws Exception {
-    // appArgs.add(System.getProperty("file.separator") + "tmp" +
-    // System.getProperty("file.separator") + "Test"
-    // + System.getProperty("file.separator") + "D*s");
-    // LS.exec(appArgs, System.in, out);
-    // String expectedOutput = "test6.txt" + "\t" + "test4.out" + "\t" + "f" + "\t"
-    // + System.getProperty("line.separator");
-    // assertEquals(expectedOutput, out.toString());
-    // }
+   
 
     @After
     // Delete the test hierarchy, reset the command arguments and reset the

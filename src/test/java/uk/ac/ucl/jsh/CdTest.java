@@ -171,13 +171,6 @@ public class CdTest {
         }
     }
 
-    // @Test
-    // public void testGlobbing() throws Exception {
-    // appArgs.add("O*r");
-    // workingDir.setWD(System.getProperty("file.separator"));
-    // CD.exec(appArgs, System.in, out);
-    // assertEquals(dirPath + System.getProperty("file.separator") + "Other",workingDir.getWD());
-    // }
 
     @AfterClass
     public static void EndTest() throws IOException {
