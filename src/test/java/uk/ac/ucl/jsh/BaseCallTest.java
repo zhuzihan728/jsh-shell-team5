@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -47,7 +49,10 @@ public class BaseCallTest {
         ArrayList<String> a = new ArrayList<>();
         a.add("test1.txt");
         a.add("test.txt");
-        assertEquals(a, bc.get_OutputArray());
+        ArrayList<String> b = bc.get_OutputArray();
+        Collections.sort(a);
+        Collections.sort(b);
+        assertEquals(a, b);
     }
 
     @Test
@@ -75,8 +80,13 @@ public class BaseCallTest {
         call = "*";
         type = 1;
         BaseCall bc = new BaseCall(call, type);
-        String a = "test1.txt test.txt";
-        assertEquals(a, bc.getString());
+        ArrayList<String> a = new ArrayList<>();
+        a.add("test1.txt");
+        a.add("test.txt");
+        ArrayList<String> b = new ArrayList(Arrays.asList(bc.getString().split(" ")));
+        Collections.sort(a);
+        Collections.sort(b);
+        assertEquals(a, b);
     }
 
     @Test

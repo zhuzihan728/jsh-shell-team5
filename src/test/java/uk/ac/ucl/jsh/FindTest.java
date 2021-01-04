@@ -6,6 +6,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -132,9 +134,12 @@ public class FindTest {
                 + System.getProperty("file.separator") + "tmp" + System.getProperty("file.separator") + "Test"
                 + System.getProperty("file.separator") + "Documents" + System.getProperty("file.separator")
                 + "test3.txt" + System.getProperty("line.separator") + System.getProperty("line.separator");
-        assertEquals(expectedOutput, out.toString());
+        ArrayList<String> a = new ArrayList(Arrays.asList(expectedOutput.split(System.getProperty("line.separator"))));
+        ArrayList<String> b = new ArrayList(Arrays.asList(out.toString().split(System.getProperty("line.separator"))));
+        Collections.sort(a);
+        Collections.sort(b);
+        assertEquals(a, b);
     }
-
 
     @Test
     public void testTooManyArgs() throws Exception {
@@ -188,16 +193,14 @@ public class FindTest {
 
     @Test
     public void testNoMatchingFile() throws Exception {
-        try{
+        try {
             appArgs.add("-name");
             appArgs.add("NotMatch");
             FIND.exec(appArgs, null, out);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             assertEquals("find: no such file or directory", e.getMessage());
-        } 
+        }
     }
-
 
     @After
     // Delete the test hierarchy, reset the command arguments and reset the
