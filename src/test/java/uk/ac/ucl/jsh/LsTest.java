@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -99,7 +100,16 @@ public class LsTest {
         LS.exec(appArgs, System.in, out);
         String expectedOutput = "test7.txt" + "\t" + "Other" + "\t" + "Try" + "\t" + "Documents" + "\t" + "tmp" + "\t"
                 + System.getProperty("line.separator");
-        assertEquals(expectedOutput, out.toString());
+        String output = out.toString();
+        String[] a = expectedOutput.split("\t");
+        String[] b = output.split("\t");
+        ArrayList<String> x = new ArrayList<>();
+        ArrayList<String> y = new ArrayList<>();
+        Collections.addAll(x, a);
+        Collections.addAll(y, b);
+        Collections.sort(x);
+        Collections.sort(y);
+        assertEquals(x, y);
     }
 
     @Test
@@ -110,7 +120,16 @@ public class LsTest {
         // appArgs.add("");
         LS.exec(appArgs, System.in, out);
         String expectedOutput = "test3.txt" + "\t" + "d" + "\t" + "e" + "\t" + System.getProperty("line.separator");
-        assertEquals(expectedOutput, out.toString());
+        String output = out.toString();
+        String[] a = expectedOutput.split("\t");
+        String[] b = output.split("\t");
+        ArrayList<String> x = new ArrayList<>();
+        ArrayList<String> y = new ArrayList<>();
+        Collections.addAll(x, a);
+        Collections.addAll(y, b);
+        Collections.sort(x);
+        Collections.sort(y);
+        assertEquals(x, y);
     }
 
     @Test
@@ -120,7 +139,16 @@ public class LsTest {
         LS.exec(appArgs, System.in, out);
         String expectedOutput = "test6.txt" + "\t" + "test4.out" + "\t" + "f" + "\t"
                 + System.getProperty("line.separator");
-        assertEquals(expectedOutput, out.toString());
+        String output = out.toString();
+        String[] a = expectedOutput.split("\t");
+        String[] b = output.split("\t");
+        ArrayList<String> x = new ArrayList<>();
+        ArrayList<String> y = new ArrayList<>();
+        Collections.addAll(x, a);
+        Collections.addAll(y, b);
+        Collections.sort(x);
+        Collections.sort(y);
+        assertEquals(x, y);
     }
 
     @Test
@@ -130,7 +158,16 @@ public class LsTest {
         LS.exec(appArgs, System.in, out);
         String expectedOutput = "test6.txt" + "\t" + "test4.out" + "\t" + "f" + "\t"
                 + System.getProperty("line.separator");
-        assertEquals(expectedOutput, out.toString());
+        String output = out.toString();
+        String[] a = expectedOutput.split("\t");
+        String[] b = output.split("\t");
+        ArrayList<String> x = new ArrayList<>();
+        ArrayList<String> y = new ArrayList<>();
+        Collections.addAll(x, a);
+        Collections.addAll(y, b);
+        Collections.sort(x);
+        Collections.sort(y);
+        assertEquals(x, y);
     }
 
     @Test
@@ -139,10 +176,17 @@ public class LsTest {
         appArgs.add(System.getProperty("file.separator") + "Other");
         LS.exec(appArgs, System.in, out);
         String expectedOutput = "a" + "\t" + System.getProperty("line.separator");
-        assertEquals(expectedOutput, out.toString());
+        String output = out.toString();
+        String[] a = expectedOutput.split("\t");
+        String[] b = output.split("\t");
+        ArrayList<String> x = new ArrayList<>();
+        ArrayList<String> y = new ArrayList<>();
+        Collections.addAll(x, a);
+        Collections.addAll(y, b);
+        Collections.sort(x);
+        Collections.sort(y);
+        assertEquals(x, y);
     }
-
-   
 
     @After
     // Delete the test hierarchy, reset the command arguments and reset the
