@@ -30,10 +30,9 @@ public class ParserErrorHandling extends BaseErrorListener{
             throws ParseCancellationException {
         String[] strings = msg.split("\\s+");
         if(msg.startsWith("mismatched input")) {
-            throw new ParseCancellationException("no viable alternative at input "
-                    + strings[2]);
+            msg = "no viable alternative at input " + strings[2];
         }
-        throw new ParseCancellationException(msg);
+        throw new ParseCancellationException(msg.replace("no viable alternative at input", "Syntax error near"));
     }
 
 }
