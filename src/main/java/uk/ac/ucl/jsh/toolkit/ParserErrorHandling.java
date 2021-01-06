@@ -30,7 +30,7 @@ public class ParserErrorHandling extends BaseErrorListener{
             throws ParseCancellationException {
         String[] strings = msg.split("\\s+");
         if(msg.startsWith("mismatched input")) {
-            throw new ParseCancellationException("Syntax error near unexpected token "
+            throw new ParseCancellationException("no viable alternative at input "
                     + strings[2]);
         }
         throw new ParseCancellationException(msg);
