@@ -29,17 +29,11 @@ public class ParserErrorHandling extends BaseErrorListener{
                             RecognitionException e)
             throws ParseCancellationException {
         String[] strings = msg.split("\\s+");
-        System.out.println(charPositionInLine);
-        System.out.println(msg);
-        if(msg.startsWith("no viable alternative at input")) {
-            throw new ParseCancellationException("Syntax error near "
-                        + strings[strings.length-1]);
-        }else if(msg.startsWith("mismatched input")){
+        if(msg.startsWith("mismatched input")) {
             throw new ParseCancellationException("Syntax error near unexpected token "
                     + strings[2]);
-        }else{
-            throw new ParseCancellationException(msg);
         }
+        throw new ParseCancellationException(msg);
     }
 
 }
